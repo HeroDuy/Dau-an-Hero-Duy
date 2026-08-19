@@ -850,14 +850,9 @@
             document.getElementById("progress-bar").style.width = percentage + "%";
             document.getElementById("progress-percent").innerText = percentage + "%";
         }
-
-     // 2. TẢI DỮ LIỆU TỰ ĐỘNG THÍCH ƯNG (CHẠY ĐƯỢC CẢ FILE CỤC BỘ LẪN ONLINE)
+// 2. TẢI DỮ LIỆU SIÊU TỐC KHÔNG BỊ CHẶN MẠNG
         function loadDataFromSheets() {
-            const startBtn = document.getElementById("splash-btn");
-
-            updateSplashProgress(30, "Đang khởi tạo hệ thống...");
-
-            // Lấy ngay dữ liệu từ bộ nhớ tạm của máy
+            // Lấy ngay dữ liệu từ bộ nhớ tạm localStorage
             const cachedData = localStorage.getItem("heroDuyTravelData");
             if (cachedData) {
                 travelData = JSON.parse(cachedData);
@@ -871,61 +866,11 @@
                 setupMapClick();
             }
 
-            updateSplashProgress(70, "Đang đồng bộ điểm đến...");
-
-            // Kiểm tra nếu chạy trực tiếp trên máy tính (file://) thì cho qua luôn không bắt buộc fetch API bị chặn
-            if (window.location.protocol === "file:") {
-                updateSplashProgress(100, "Đã sẵn sàng trên máy tính!");
-                if(startBtn) startBtn.disabled = false;
-                return;
-            }
-
-            // Nếu chạy trên link GitHub online thì gọi API Google Sheets ngầm
-            fetch(API_URL)
-                .then(res => res.json())
-                .then(data => {
-                    travelData = data;
-                    localStorage.setItem("heroDuyTravelData", JSON.stringify(data)); 
-                    
-                    data.forEach(item => {
-                        const provinceEl = document.getElementById(item.ID);
-                        if (provinceEl) {
-                            if (item.TrangThai && item.TrangThai.toLowerCase().includes("đã đi")) {
-                                provinceEl.classList.add("visited");
-                            } else {
-                                provinceEl.classList.remove("visited"); 
-                            }
-                        }
-                    });
-                    updateStats();
-                    setupMapClick();
-                    
-                    updateSplashProgress(100, "Đã hoàn tất!");
-                    if(startBtn) startBtn.disabled = false;
-                })
-                .catch(err => {
-                    console.warn("Chế độ ngoại tuyến:", err);
-                    updateSplashProgress(100, "Sẵn sàng trải nghiệm!");
-                    if(startBtn) startBtn.disabled = false;
-                });
-        }
-
-        function updateSplashProgress(percent, message) {
-            const progressBar = document.getElementById("splash-progress");
-            const percentText = document.getElementById("splash-percent-text");
-            if(progressBar && percentText) {
-                progressBar.style.width = percent + "%";
-                percentText.innerText = percent + "%";
-            }
-        }
-
-        function closeSplash() {
+            // Ẩn màn hình chờ ngay lập tức để người dùng vào xem luôn không bị đơ
             const splash = document.getElementById("splash-screen");
-            if(splash) {
+            if (splash) {
                 splash.style.opacity = "0";
-                setTimeout(() => {
-                    splash.style.display = "none";
-                }, 500);
+                setTimeout(() => splash.style.display = "none", 500);
             }
         }
         // 3. XỬ LÝ CLICK XEM THÔNG TIN

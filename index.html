@@ -851,16 +851,13 @@
             document.getElementById("progress-percent").innerText = percentage + "%";
         }
 
-      // 2. TẢI DỮ LIỆU & ĐỒNG BỘ TIẾN TRÌNH THẬT CHO MÀN HÌNH CHỜ
+     // 2. TẢI DỮ LIỆU TỰ ĐỘNG THÍCH ƯNG (CHẠY ĐƯỢC CẢ FILE CỤC BỘ LẪN ONLINE)
         function loadDataFromSheets() {
-            const progressBar = document.getElementById("splash-progress");
-            const percentText = document.getElementById("splash-percent-text");
             const startBtn = document.getElementById("splash-btn");
 
-            // Mốc 1: Khởi tạo giao diện và bản đồ (20%)
-            updateSplashProgress(20, "Đang khởi tạo bản đồ hành trình...");
+            updateSplashProgress(30, "Đang khởi tạo hệ thống...");
 
-            // Mốc 2: Nạp dữ liệu tạm từ bộ nhớ máy (50%)
+            // Lấy ngay dữ liệu từ bộ nhớ tạm của máy
             const cachedData = localStorage.getItem("heroDuyTravelData");
             if (cachedData) {
                 travelData = JSON.parse(cachedData);
@@ -873,35 +870,44 @@
                 updateStats();
                 setupMapClick();
             }
-            updateSplashProgress(60, "Đã tải dữ liệu bộ nhớ cục bộ...");
 
-            // Mốc 3: Kết nối đồng bộ ngầm qua API Google Sheets (100%)
-            fetch(API_URL).then(res => res.json()).then(data => {
-                travelData = data;
-                localStorage.setItem("heroDuyTravelData", JSON.stringify(data)); 
-                
-                data.forEach(item => {
-                    const provinceEl = document.getElementById(item.ID);
-                    if (provinceEl) {
-                        if (item.TrangThai && item.TrangThai.toLowerCase().includes("đã đi")) {
-                            provinceEl.classList.add("visited");
-                        } else {
-                            provinceEl.classList.remove("visited"); 
+            updateSplashProgress(70, "Đang đồng bộ điểm đến...");
+
+            // Kiểm tra nếu chạy trực tiếp trên máy tính (file://) thì cho qua luôn không bắt buộc fetch API bị chặn
+            if (window.location.protocol === "file:") {
+                updateSplashProgress(100, "Đã sẵn sàng trên máy tính!");
+                if(startBtn) startBtn.disabled = false;
+                return;
+            }
+
+            // Nếu chạy trên link GitHub online thì gọi API Google Sheets ngầm
+            fetch(API_URL)
+                .then(res => res.json())
+                .then(data => {
+                    travelData = data;
+                    localStorage.setItem("heroDuyTravelData", JSON.stringify(data)); 
+                    
+                    data.forEach(item => {
+                        const provinceEl = document.getElementById(item.ID);
+                        if (provinceEl) {
+                            if (item.TrangThai && item.TrangThai.toLowerCase().includes("đã đi")) {
+                                provinceEl.classList.add("visited");
+                            } else {
+                                provinceEl.classList.remove("visited"); 
+                            }
                         }
-                    }
+                    });
+                    updateStats();
+                    setupMapClick();
+                    
+                    updateSplashProgress(100, "Đã hoàn tất!");
+                    if(startBtn) startBtn.disabled = false;
+                })
+                .catch(err => {
+                    console.warn("Chế độ ngoại tuyến:", err);
+                    updateSplashProgress(100, "Sẵn sàng trải nghiệm!");
+                    if(startBtn) startBtn.disabled = false;
                 });
-                updateStats();
-                setupMapClick();
-                
-                // Hoàn tất 100% khi API phản hồi xong
-                updateSplashProgress(100, "Đã đồng bộ dữ liệu hoàn tất!");
-                startBtn.disabled = false; // Mở khóa nút bấm cho phép người dùng vào xem
-            }).catch(err => {
-                console.error("Lỗi mạng:", err);
-                // Dù lỗi mạng thì vẫn cho phép người dùng vào bằng dữ liệu đã lưu ở máy
-                updateSplashProgress(100, "Sẵn sàng trải nghiệm ngoại tuyến!");
-                startBtn.disabled = false;
-            });
         }
 
         function updateSplashProgress(percent, message) {
@@ -919,7 +925,7 @@
                 splash.style.opacity = "0";
                 setTimeout(() => {
                     splash.style.display = "none";
-                }, 500); // Hiệu ứng mờ dần (fade out) cực mượt khi bấm nút bắt đầu
+                }, 500);
             }
         }
         // 3. XỬ LÝ CLICK XEM THÔNG TIN

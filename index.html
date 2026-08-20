@@ -802,243 +802,287 @@
 
     <script>
         // --- CẤU HÌNH API ---
-        const API_URL = "https://script.google.com/macros/s/AKfycbxlNm7U_OvtOBM9zycrAYTWhoZRhkUr4fKNg0s3VJpTYG7ExNQ3HqkX9GaoW3aWrw/exec";
-        let travelData = [];
-        const dsTinhThanh = [
-            { id: "VN71", name: "Điện Biên" }, { id: "VN05", name: "Sơn La" }, { id: "VN21", name: "Thanh Hóa" }, { id: "VN22", name: "Nghệ An" }, { id: "VN23", name: "Hà Tĩnh" }, { id: "VN01", name: "Lai Châu" }, { id: "VN09", name: "Lạng Sơn" }, { id: "VN13", name: "Quảng Ninh" }, { id: "VN31", name: "Bình Định" }, { id: "VN53", name: "Đông Bắc" }, { id: "VN66", name: "Đồng Bằng Sông Hồng" }, { id: "TuyenQuang_Moi", name: "Tuyên Quang (Sáp nhập)" }, { id: "LaoCai_Moi", name: "Lào Cai (Sáp nhập)" }, { id: "ThaiNguyen_Moi", name: "Thái Nguyên (Sáp nhập)" }, { id: "PhuTho_Moi", name: "Phú Thọ (Sáp nhập)" }, { id: "BacNinh_Moi", name: "Bắc Ninh (Sáp nhập)" }, { id: "HungYen_Moi", name: "Hưng Yên (Sáp nhập)" }, { id: "HaiPhong_Moi", name: "Hải Phòng (Sáp nhập)" }, { id: "NinhBinh_Moi", name: "Ninh Bình (Sáp nhập)" }, { id: "QuangTri_Moi", name: "Quảng Trị (Sáp nhập)" }, { id: "DaNang_Moi", name: "Đà Nẵng (Sáp nhập)" }, { id: "QuangNgai_Moi", name: "Quảng Ngãi (Sáp nhập)" }, { id: "GiaLai_Moi", name: "Gia Lai (Sáp nhập)" }, { id: "KhanhHoa_Moi", name: "Khánh Hòa (Sáp nhập)" }, { id: "LamDong_Moi", name: "Lâm Đồng (Sáp nhập)" }, { id: "DakLak_Moi", name: "Đắk Lắk (Sáp nhập)" }, { id: "HoChiMinh_Moi", name: "TP. Hồ Chí Minh (Sáp nhập)" }, { id: "DongNai_Moi", name: "Đồng Nai (Sáp nhập)" }, { id: "TayNinh_Moi", name: "Tây Ninh (Sáp nhập)" }, { id: "CanTho_Moi", name: "Cần Thơ (Sáp nhập)" }, { id: "VinhLong_Moi", name: "Vĩnh Long (Sáp nhập)" }, { id: "DongThap_Moi", name: "Đồng Tháp (Sáp nhập)" }, { id: "CaMau_Moi", name: "Cà Mau (Sáp nhập)" }, { id: "AnGiang_Moi", name: "An Giang (Sáp nhập)" }
-        ];
+const API_URL = "https://script.google.com/macros/s/AKfycbzRNf8FOql1A3MWkpGzm-eWp62IA07TjoN4dDIdh8GkfwCwGaRIchdDB5oPKuvrEQ8G/exec";
+let travelData = [];
+const dsTinhThanh = [
+    { id: "VN71", name: "Điện Biên" }, { id: "VN05", name: "Sơn La" }, { id: "VN21", name: "Thanh Hóa" }, 
+    { id: "VN22", name: "Nghệ An" }, { id: "VN23", name: "Hà Tĩnh" }, { id: "VN01", name: "Lai Châu" }, 
+    { id: "VN09", name: "Lạng Sơn" }, { id: "VN13", name: "Quảng Ninh" }, { id: "VN31", name: "Bình Định" }, 
+    { id: "VN53", name: "Đông Bắc" }, { id: "VN66", name: "Đồng Bằng Sông Hồng" }, 
+    { id: "TuyenQuang_Moi", name: "Tuyên Quang (Sáp nhập)" }, { id: "LaoCai_Moi", name: "Lào Cai (Sáp nhập)" }, 
+    { id: "ThaiNguyen_Moi", name: "Thái Nguyên (Sáp nhập)" }, { id: "PhuTho_Moi", name: "Phú Thọ (Sáp nhập)" }, 
+    { id: "BacNinh_Moi", name: "Bắc Ninh (Sáp nhập)" }, { id: "HungYen_Moi", name: "Hưng Yên (Sáp nhập)" }, 
+    { id: "HaiPhong_Moi", name: "Hải Phòng (Sáp nhập)" }, { id: "NinhBinh_Moi", name: "Ninh Bình (Sáp nhập)" }, 
+    { id: "QuangTri_Moi", name: "Quảng Trị (Sáp nhập)" }, { id: "DaNang_Moi", name: "Đà Nẵng (Sáp nhập)" }, 
+    { id: "QuangNgai_Moi", name: "Quảng Ngãi (Sáp nhập)" }, { id: "GiaLai_Moi", name: "Gia Lai (Sáp nhập)" }, 
+    { id: "KhanhHoa_Moi", name: "Khánh Hòa (Sáp nhập)" }, { id: "LamDong_Moi", name: "Lâm Đồng (Sáp nhập)" }, 
+    { id: "DakLak_Moi", name: "Đắk Lắk (Sáp nhập)" }, { id: "HoChiMinh_Moi", name: "TP. Hồ Chí Minh (Sáp nhập)" }, 
+    { id: "DongNai_Moi", name: "Đồng Nai (Sáp nhập)" }, { id: "TayNinh_Moi", name: "Tây Ninh (Sáp nhập)" }, 
+    { id: "CanTho_Moi", name: "Cần Thơ (Sáp nhập)" }, { id: "VinhLong_Moi", name: "Vĩnh Long (Sáp nhập)" }, 
+    { id: "DongThap_Moi", name: "Đồng Tháp (Sáp nhập)" }, { id: "CaMau_Moi", name: "Cà Mau (Sáp nhập)" }, 
+    { id: "AnGiang_Moi", name: "An Giang (Sáp nhập)" }
+];
 
-        document.addEventListener("DOMContentLoaded", function() {
-            initMap();
-            loadDataFromSheets();
-            populateSelectBox();
-        });
+document.addEventListener("DOMContentLoaded", function() {
+    initMap();
+    populateSelectBox();
+    setupMapClick(); // Kích hoạt sự kiện click/hover ngay lập tức
+    loadData();      // Tải dữ liệu từ cache và Google Sheets
+});
 
-        // 1. KHỞI TẠO BẢN ĐỒ GỘP
-        function initMap() {
-            const sapsNhap = {
-                "TuyenQuang_Moi": ["VN07", "VN03"], "LaoCai_Moi": ["VN02", "VN06"], "ThaiNguyen_Moi": ["VN53", "VN69"], "PhuTho_Moi": ["VN70", "VN68", "VN14"], "BacNinh_Moi": ["VN56", "VN54"], "HungYen_Moi": ["VN66", "VN20"], "HaiPhong_Moi": ["VN61", "VNHP"], "NinhBinh_Moi": ["VN63", "VN18", "VN67"], "QuangTri_Moi": ["VN24", "VN25"], "DaNang_Moi": ["VNDN", "VN27"], "QuangNgai_Moi": ["VN28", "VN29"], "GiaLai_Moi": ["VN30", "VN31"], "KhanhHoa_Moi": ["VN36", "VN34"], "LamDong_Moi": ["VN35", "VN72", "VN40"], "DakLak_Moi": ["VN33", "VN32"], "HoChiMinh_Moi": ["VN43", "VN57", "VNSG"], "DongNai_Moi": ["VN39", "VN58"], "TayNinh_Moi": ["VN37", "VN41"], "CanTho_Moi": ["VNCT", "VN52", "VN73"], "VinhLong_Moi": ["VN50", "VN49", "VN51"], "DongThap_Moi": ["VN46", "VN45"], "CaMau_Moi": ["VN55", "VN59"], "AnGiang_Moi": ["VN44", "VN47"]
-            };
-            const svgFeatures = document.getElementById("features");
-            if (svgFeatures) {
-                for (const [newName, oldIds] of Object.entries(sapsNhap)) {
-                    const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-                    group.id = newName;
-                    group.classList.add("merged-province");
-                    oldIds.forEach(id => {
-                        const el = document.getElementById(id);
-                        if (el) group.appendChild(el);
-                    });
-                    svgFeatures.appendChild(group);
-                }
-            }
-        }
-
-        // Cập nhật thanh Progress Bar
-        function updateStats() {
-            let count = 0;
-            travelData.forEach(item => {
-                if (item.TrangThai && item.TrangThai.toLowerCase().includes("đã đi")) {
-                    count++;
-                }
+// 1. KHỞI TẠO BẢN ĐỒ GỘP
+function initMap() {
+    const sapsNhap = {
+        "TuyenQuang_Moi": ["VN07", "VN03"], "LaoCai_Moi": ["VN02", "VN06"], "ThaiNguyen_Moi": ["VN53", "VN69"], 
+        "PhuTho_Moi": ["VN70", "VN68", "VN14"], "BacNinh_Moi": ["VN56", "VN54"], "HungYen_Moi": ["VN66", "VN20"], 
+        "HaiPhong_Moi": ["VN61", "VNHP"], "NinhBinh_Moi": ["VN63", "VN18", "VN67"], "QuangTri_Moi": ["VN24", "VN25"], 
+        "DaNang_Moi": ["VNDN", "VN27"], "QuangNgai_Moi": ["VN28", "VN29"], "GiaLai_Moi": ["VN30", "VN31"], 
+        "KhanhHoa_Moi": ["VN36", "VN34"], "LamDong_Moi": ["VN35", "VN72", "VN40"], "DakLak_Moi": ["VN33", "VN32"], 
+        "HoChiMinh_Moi": ["VN43", "VN57", "VNSG"], "DongNai_Moi": ["VN39", "VN58"], "TayNinh_Moi": ["VN37", "VN41"], 
+        "CanTho_Moi": ["VNCT", "VN52", "VN73"], "VinhLong_Moi": ["VN50", "VN49", "VN51"], "DongThap_Moi": ["VN46", "VN45"], 
+        "CaMau_Moi": ["VN55", "VN59"], "AnGiang_Moi": ["VN44", "VN47"]
+    };
+    const svgFeatures = document.getElementById("features");
+    if (svgFeatures) {
+        for (const [newName, oldIds] of Object.entries(sapsNhap)) {
+            const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+            group.id = newName;
+            group.classList.add("merged-province");
+            oldIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) group.appendChild(el);
             });
-            document.getElementById("explored-count").innerText = count;
-            
-            const totalProvinces = 34;
-            const percentage = Math.round((count / totalProvinces) * 100);
-            
-            document.getElementById("progress-bar").style.width = percentage + "%";
-            document.getElementById("progress-percent").innerText = percentage + "%";
+            svgFeatures.appendChild(group);
         }
-// 2. TẢI DỮ LIỆU SIÊU TỐC KHÔNG BỊ CHẶN MẠNG
-        function loadDataFromSheets() {
-            // Lấy ngay dữ liệu từ bộ nhớ tạm localStorage
-            const cachedData = localStorage.getItem("heroDuyTravelData");
-            if (cachedData) {
-                travelData = JSON.parse(cachedData);
-                travelData.forEach(item => {
-                    if (item.TrangThai && item.TrangThai.toLowerCase().includes("đã đi")) {
-                        const provinceEl = document.getElementById(item.ID);
-                        if (provinceEl) provinceEl.classList.add("visited");
-                    }
-                });
-                updateStats();
-                setupMapClick();
-            }
+    }
+}
 
-            // Ẩn màn hình chờ ngay lập tức để người dùng vào xem luôn không bị đơ
+// 2. VẼ MÀU VÀ CẬP NHẬT TIẾN ĐỘ LÊN BẢN ĐỒ
+function renderMapData() {
+    // Xóa màu cũ trước khi vẽ lại
+    document.querySelectorAll(".visited").forEach(el => el.classList.remove("visited"));
+
+    travelData.forEach(item => {
+        if (item.TrangThai && item.TrangThai.toLowerCase().includes("đã đi")) {
+            const provinceEl = document.getElementById(item.ID);
+            if (provinceEl) provinceEl.classList.add("visited");
+        }
+    });
+    updateStats();
+}
+
+function updateStats() {
+    let count = 0;
+    travelData.forEach(item => {
+        if (item.TrangThai && item.TrangThai.toLowerCase().includes("đã đi")) {
+            count++;
+        }
+    });
+    document.getElementById("explored-count").innerText = count;
+    
+    const totalProvinces = 34;
+    const percentage = Math.round((count / totalProvinces) * 100);
+    
+    document.getElementById("progress-bar").style.width = percentage + "%";
+    document.getElementById("progress-percent").innerText = percentage + "%";
+}
+
+// 3. TẢI DỮ LIỆU (TỪ LOCALSTORAGE + ĐỒNG BỘ GOOGLE SHEETS)
+function loadData() {
+    // Đọc cache trước để hiển thị ngay
+    const cachedData = localStorage.getItem("heroDuyTravelData");
+    if (cachedData) {
+        try {
+            travelData = JSON.parse(cachedData);
+            renderMapData();
+        } catch (e) {
+            console.error("Lỗi đọc cache:", e);
+        }
+    }
+
+    // Gọi API lấy dữ liệu thực từ Google Apps Script
+    fetch(API_URL)
+        .then(res => res.json())
+        .then(data => {
+            if (Array.isArray(data) && data.length > 0) {
+                travelData = data;
+                localStorage.setItem("heroDuyTravelData", JSON.stringify(travelData));
+                renderMapData();
+            }
+        })
+        .catch(err => {
+            console.warn("Không thể tải từ Google Sheets (dùng dữ liệu cache):", err);
+        })
+        .finally(() => {
+            // Tắt màn hình chờ
             const splash = document.getElementById("splash-screen");
             if (splash) {
                 splash.style.opacity = "0";
-                setTimeout(() => splash.style.display = "none", 500);
+                setTimeout(() => splash.style.display = "none", 400);
             }
-        }
-        // 3. XỬ LÝ CLICK XEM THÔNG TIN
-        // 3. XỬ LÝ CLICK XEM THÔNG TIN & RÊ CHUỘT HIỂN THỊ TÊN
-        function setupMapClick() {
-            const tooltip = document.getElementById("tooltip"); // Gọi hộp tooltip ra
+        });
+}
 
-            document.querySelectorAll("svg > g#features > path, svg > g#features > g.merged-province").forEach(el => {
+// 4. SỰ KIỆN CLICK & HOVER TỈNH THÀNH
+function setupMapClick() {
+    const tooltip = document.getElementById("tooltip");
+
+    document.querySelectorAll("svg > g#features > path, svg > g#features > g.merged-province").forEach(el => {
+        el.addEventListener("click", function(e) {
+            e.stopPropagation();
+            const info = travelData.find(x => x.ID === this.id);
+            
+            if (info && info.TrangThai && info.TrangThai.toLowerCase().includes("đã đi")) {
+                document.getElementById("modalTitle").innerText = info.TenTinh || "Chi tiết điểm đến";
                 
-                // --- Sự kiện 1: CLICK ĐỂ MỞ BẢNG ĐIỂM ĐẾN ---
-                el.addEventListener("click", function(e) {
-                    e.stopPropagation();
-                    const info = travelData.find(x => x.ID === this.id);
-                    
-                    if (info && info.TrangThai.toLowerCase().includes("đã đi")) {
-                        document.getElementById("modalTitle").innerText = info.TenTinh;
-                        
-                        let contentHTML = "";
-                        if (info.NoiDung && info.NoiDung.trim() !== "") {
-                            let blocks = info.NoiDung.split(/\n\s*\n/); 
-                            blocks.forEach(block => {
-                                let lines = block.trim().split('\n');
-                                if (lines.length > 0) {
-                                    let title = lines[0].trim();
-                                    let desc = lines.slice(1).join('<br>').trim();
-                                    if(desc === "") desc = "Chưa có mô tả chi tiết.";
-                                    
-                                    contentHTML += `
-                                    <div class="destination-card">
-                                        <div class="destination-title">📍 ${title}</div>
-                                        <div class="destination-desc">${desc}</div>
-                                    </div>`;
-                                }
-                            });
-                        } else {
-                            contentHTML = "<div style='text-align:center; color:#aaa; font-style:italic;'>Chưa có nội dung ghi chú.</div>";
+                let contentHTML = "";
+                if (info.NoiDung && info.NoiDung.trim() !== "") {
+                    let blocks = info.NoiDung.split(/\n\s*\n/); 
+                    blocks.forEach(block => {
+                        let lines = block.trim().split('\n');
+                        if (lines.length > 0) {
+                            let title = lines[0].trim();
+                            let desc = lines.slice(1).join('<br>').trim();
+                            if(desc === "") desc = "Chưa có mô tả chi tiết.";
+                            
+                            contentHTML += `
+                            <div class="destination-card">
+                                <div class="destination-title">📍 ${title}</div>
+                                <div class="destination-desc">${desc}</div>
+                            </div>`;
                         }
-                        
-                        document.getElementById("modalDesc").innerHTML = contentHTML;
-                        document.getElementById("infoModal").style.display = "flex";
-                        tooltip.style.opacity = "0"; // Ẩn tooltip khi đang mở bảng chi tiết
-                    }
-                });
-
-                // --- Sự kiện 2: RÊ CHUỘT VÀO THÌ HIỆN TÊN TỈNH ---
-                el.addEventListener("mousemove", function(e) {
-                    let regionName = "Chưa rõ";
-                    
-                    // Dò tên tỉnh trong danh sách dsTinhThanh dựa vào ID
-                    const provinceInfo = dsTinhThanh.find(x => x.id === this.id);
-                    if (provinceInfo) {
-                        regionName = provinceInfo.name;
-                    } else if (this.getAttribute("name")) {
-                        // Nếu là tỉnh chưa sáp nhập thì lấy trực tiếp tên từ SVG
-                        regionName = this.getAttribute("name");
-                    }
-                    
-                    tooltip.innerHTML = regionName;
-                    tooltip.style.left = (e.clientX + 15) + "px"; // Cách con trỏ chuột 15px
-                    tooltip.style.top = (e.clientY + 15) + "px";
-                    tooltip.style.opacity = "1"; // Hiện tooltip lên
-                });
-
-                // --- Sự kiện 3: RÚT CHUỘT RA THÌ ẨN TÊN TỈNH ---
-                el.addEventListener("mouseout", function() {
-                    tooltip.style.opacity = "0"; // Ẩn tooltip đi
-                });
-
-            });
-        }
-        function closeInfoModal() { document.getElementById("infoModal").style.display = "none"; }
-
-        // 4. HỆ THỐNG QUẢN TRỊ (ADMIN)
-        function openLogin() { document.getElementById("loginModal").style.display = "flex"; }
-        function closeLoginModal() { document.getElementById("loginModal").style.display = "none"; document.getElementById("adminPass").value = ""; }
-        
-        function checkPass() {
-            const pass = document.getElementById("adminPass").value;
-            if (pass === "058206") {
-                closeLoginModal();
-                document.getElementById("adminModal").style.display = "flex";
-            } else {
-                alert("Mật khẩu không chính xác!");
-            }
-        }
-
-        function closeAdminModal() { document.getElementById("adminModal").style.display = "none"; }
-
-        function populateSelectBox() {
-            const selectBox = document.getElementById("selectTinh");
-            dsTinhThanh.sort((a,b) => a.name.localeCompare(b.name)).forEach(tinh => {
-                let option = document.createElement("option");
-                option.value = tinh.id;
-                option.text = tinh.name;
-                selectBox.appendChild(option);
-            });
-        }
-
-      // 5. GỬI DỮ LIỆU TỐC ĐỘ CAO (LƯU TỨC THÌ + CHẠY NGẦM GOOGLE SHEETS)
-        function saveData() {
-            const selectBox = document.getElementById("selectTinh");
-            const idTinh = selectBox.value;
-            const tenTinh = selectBox.options[selectBox.selectedIndex].text;
-            const trangThai = document.getElementById("selectTrangThai").value;
-            const noiDung = document.getElementById("inputNoiDung").value;
-
-            const payload = {
-                ID: idTinh,
-                TenTinh: tenTinh,
-                TrangThai: trangThai,
-                NoiDung: noiDung
-            };
-
-            const btn = document.getElementById("btnSave");
-            btn.innerText = "ĐANG LƯU...";
-            btn.disabled = true;
-
-            // BƯỚC 1: Cập nhật ngay vào mảng dữ liệu hiện tại trên máy
-            let existingIndex = travelData.findIndex(x => x.ID === idTinh);
-            if (existingIndex >= 0) {
-                travelData[existingIndex] = payload;
-            } else {
-                travelData.push(payload);
-            }
-
-            // BƯỚC 2: Lưu ngay lập tức vào bộ nhớ tạm localStorage của trình duyệt
-            localStorage.setItem("heroDuyTravelData", JSON.stringify(travelData));
-
-            // BƯỚC 3: Cập nhật màu sắc trực tiếp trên bản đồ ngay lập tức không cần đợi mạng
-            const provinceEl = document.getElementById(idTinh);
-            if (provinceEl) {
-                if (trangThai.toLowerCase().includes("đã đi")) {
-                    provinceEl.classList.add("visited");
+                    });
                 } else {
-                    provinceEl.classList.remove("visited");
+                    contentHTML = "<div style='text-align:center; color:#aaa; font-style:italic;'>Chưa có nội dung ghi chú.</div>";
                 }
+                
+                document.getElementById("modalDesc").innerHTML = contentHTML;
+                document.getElementById("infoModal").style.display = "flex";
+                if (tooltip) tooltip.style.opacity = "0";
             }
-            updateStats(); // Cập nhật lại số liệu thống kê
+        });
 
-            // BƯỚC 4: Bắn dữ liệu ngầm lên Google Sheets (Không chặn giao diện)
-            fetch(API_URL, {
-                method: "POST",
-                mode: "no-cors",
-                headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify(payload)
-            }).then(() => {
-                // Hoàn tất ngầm thành công
-                console.log("Đã đồng bộ lên Google Sheets thành công!");
-            }).catch(err => {
-                console.error("Lỗi đồng bộ ngầm:", err);
-            });
+        el.addEventListener("mousemove", function(e) {
+            if (!tooltip) return;
+            let regionName = "Chưa rõ";
+            const provinceInfo = dsTinhThanh.find(x => x.id === this.id);
+            if (provinceInfo) {
+                regionName = provinceInfo.name;
+            } else if (this.getAttribute("name")) {
+                regionName = this.getAttribute("name");
+            }
+            
+            tooltip.innerHTML = regionName;
+            tooltip.style.left = (e.clientX + 15) + "px";
+            tooltip.style.top = (e.clientY + 15) + "px";
+            tooltip.style.opacity = "1";
+        });
 
-            // BƯỚC 5: Đóng bảng quản trị ngay lập tức cho mượt mà
-            setTimeout(() => {
-                alert("Lưu thành công!");
-                closeAdminModal();
-                btn.innerText = "LƯU LÊN BẢN ĐỒ";
-                btn.disabled = false;
-            }, 300); // Chỉ mất 0.3 giây là xong mọi thao tác
-        }
-        // Chặn phím tắt (đã có từ code cũ)
-        document.addEventListener('contextmenu', event => event.preventDefault());
-        document.onkeydown = function(e) {
-            if(e.keyCode == 123) return false; 
-            if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false; 
-            if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false; 
-            if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false; 
-        }
+        el.addEventListener("mouseout", function() {
+            if (tooltip) tooltip.style.opacity = "0";
+        });
+    });
+}
+
+function closeInfoModal() { 
+    document.getElementById("infoModal").style.display = "none"; 
+}
+
+// 5. GIAO DIỆN QUẢN TRỊ ADMIN
+function openLogin() { 
+    document.getElementById("loginModal").style.display = "flex"; 
+}
+function closeLoginModal() { 
+    document.getElementById("loginModal").style.display = "none"; 
+    document.getElementById("adminPass").value = ""; 
+}
+
+function checkPass() {
+    const pass = document.getElementById("adminPass").value;
+    if (pass === "058206") {
+        closeLoginModal();
+        document.getElementById("adminModal").style.display = "flex";
+    } else {
+        alert("Mật khẩu không chính xác!");
+    }
+}
+
+function closeAdminModal() { 
+    document.getElementById("adminModal").style.display = "none"; 
+}
+
+function populateSelectBox() {
+    const selectBox = document.getElementById("selectTinh");
+    if (!selectBox) return;
+    selectBox.innerHTML = "";
+    dsTinhThanh.sort((a,b) => a.name.localeCompare(b.name)).forEach(tinh => {
+        let option = document.createElement("option");
+        option.value = tinh.id;
+        option.text = tinh.name;
+        selectBox.appendChild(option);
+    });
+}
+
+// 6. LƯU DỮ LIỆU VÀ ĐỒNG BỘ LÊN GOOGLE SHEETS
+function saveData() {
+    const selectBox = document.getElementById("selectTinh");
+    const idTinh = selectBox.value;
+    const tenTinh = selectBox.options[selectBox.selectedIndex].text;
+    const trangThai = document.getElementById("selectTrangThai").value;
+    const noiDung = document.getElementById("inputNoiDung").value;
+
+    const payload = {
+        ID: idTinh,
+        TenTinh: tenTinh,
+        TrangThai: trangThai,
+        NoiDung: noiDung
+    };
+
+    const btn = document.getElementById("btnSave");
+    btn.innerText = "ĐANG LƯU...";
+    btn.disabled = true;
+
+    // Cập nhật mảng dữ liệu nội bộ
+    let existingIndex = travelData.findIndex(x => x.ID === idTinh);
+    if (existingIndex >= 0) {
+        travelData[existingIndex] = payload;
+    } else {
+        travelData.push(payload);
+    }
+
+    // Lưu vào localStorage và render lại giao diện ngay lập tức
+    localStorage.setItem("heroDuyTravelData", JSON.stringify(travelData));
+    renderMapData();
+
+    // Gửi ngầm lên Google Sheets
+    fetch(API_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+    }).then(() => {
+        console.log("Đã đồng bộ lên Google Sheets thành công!");
+    }).catch(err => {
+        console.error("Lỗi đồng bộ ngầm:", err);
+    });
+
+    setTimeout(() => {
+        alert("Lưu thành công!");
+        closeAdminModal();
+        btn.innerText = "LƯU LÊN BẢN ĐỒ";
+        btn.disabled = false;
+        document.getElementById("inputNoiDung").value = "";
+    }, 300);
+}
+
+// Chặn phím tắt kiểm tra mã nguồn
+document.addEventListener('contextmenu', event => event.preventDefault());
+document.onkeydown = function(e) {
+    if(e.keyCode == 123) return false; 
+    if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false; 
+    if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false; 
+    if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false; 
+};
     </script>
 </body>
 </html>

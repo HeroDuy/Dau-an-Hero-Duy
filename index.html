@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vietnam Travel Explorer</title>
-    <!-- Import Font hiện đại -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    
+   <!-- Import Font hiện đại -->
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* --- CẤU HÌNH BIẾN MÀU & HIỆU ỨNG --- */
         :root {
@@ -24,14 +23,14 @@
             margin: 0; 
             padding: 0;
             min-height: 100vh;
-            font-family: 'Plus Jakarta Sans', sans-serif; 
+            font-family: 'Inter', sans-serif; 
             color: var(--white);
             display: flex; 
             flex-direction: column; 
             align-items: center; 
             /* Dùng lớp phủ màu đen (rgba 0,0,0) với độ mờ 50% để giữ nguyên màu gốc của ảnh */
             background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
-                        url("bg.jpg") center/cover fixed;
+                        url("https://cdn.phototourl.com/free/2026-08-20-0ea42f38-bc41-45a6-8fc9-13d686dd87f3.jpg") center/cover fixed;
         }
         /* --- HEADER CHUYÊN NGHIỆP --- */
         .hero-header {
@@ -49,7 +48,7 @@
             margin-bottom: 5px;
         }
         .hero-header h1 { 
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Be Vietnam Pro', sans-serif;
             font-size: 36px;
             margin: 0;
             letter-spacing: -0.03em;
@@ -101,19 +100,33 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-/* --- BẢN ĐỒ GLASSMORPHISM CARD (CÓ KHUNG NỀN MỜ SANG TRỌNG) --- */
-        .map-card { 
-            background: rgba(255, 255, 255, 0.08); /* Lớp nền mờ xám nhẹ */
-            backdrop-filter: blur(20px); /* Hiệu ứng làm mờ cảnh phía sau */
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2); /* Viền sáng tinh tế */
-            border-radius: 28px; 
-            padding: 30px; 
-            box-shadow: 0 25px 60px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15); 
-            position: relative; 
-            display: flex;
-            justify-content: center;
-        }
+/* --- BẢN ĐỒ GLASSMORPHISM CARD --- */
+.map-card { 
+    background: rgba(255, 255, 255, 0.08); 
+    backdrop-filter: blur(20px); 
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2); 
+    border-radius: 28px; 
+    
+    /* 1. Giảm padding trái/phải xuống (30px trên-dưới, 15px trái-phải) */
+    padding: 30px 15px; 
+    
+    /* 2. Thêm dòng này để ép khung chữ nhật gọn lại theo chiều ngang */
+    width: 380px; 
+    max-width: 100%;
+    
+    box-shadow: 0 25px 60px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15); 
+    position: relative; 
+    display: flex;
+    justify-content: center;
+}
+
+/* --- BẢN ĐỒ SVG --- */
+.vietnam-map {
+    width: 100%;
+    /* 3. Giảm max-width của SVG từ 600px xuống 360px để khớp với khung mới */
+    max-width: 360px; 
+}
         /* --- BẢN ĐỒ SVG --- */
         .vietnam-map {
             width: 100%;
@@ -275,9 +288,21 @@
         .dot.visited { background: #32d583; box-shadow: 0 0 8px #32d583; }
         .dot.unvisited { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); }
 
-        /* --- THIẾT KẾ ĐÁP ỨNG (RESPONSIVE) --- */
-       /* --- THIẾT KẾ ĐÁP ỨNG (RESPONSIVE CHO ĐIỆN THOẠI) --- */
+ /* --- THIẾT KẾ ĐÁP ỨNG (RESPONSIVE CHO ĐIỆN THOẠI) --- */
         @media screen and (max-width: 850px) {
+            /* 1. VÁ LỖI ÁM TRẮNG & DÙNG ẢNH URL ONLINE */
+            body {
+                background-color: var(--bg-dark); /* Lớp lót tối màu phòng hờ trình duyệt bị lag */
+                
+                /* Dán link ảnh online của ông vào giữa cặp dấu ngoặc kép bên dưới */
+                background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                                  url("https://cdn.phototourl.com/free/2026-08-20-a4ce7a55-eab1-4cca-a6bf-2fa930702edc.jpg");
+                
+                background-position: center;
+                background-size: cover;
+                background-attachment: scroll; /* QUAN TRỌNG NHẤT: Đổi từ fixed sang scroll để chống lỗi trắng nền trên Android/Zalo */
+            }
+
             .travel-dashboard { 
                 flex-direction: column; 
                 align-items: center; 
@@ -293,28 +318,34 @@
                 box-sizing: border-box;
             }
             .stat-item { margin-bottom: 0; }
+            
+            /* 2. THU NHỎ Ô MỜ BẢN ĐỒ */
             .map-card { 
-                padding: 20px 10px; 
-                width: 100%; 
+                padding: 15px 5px; 
+                width: 95%; 
+                max-width: 380px; 
                 box-sizing: border-box;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                border-radius: 20px; 
             }
             .vietnam-map {
                 max-width: 100%;
+                margin-top: -15px; 
+                margin-bottom: -15px; 
             }
-            /* Đưa phần chú thích xuống dưới bản đồ trên điện thoại để không bị đè chữ */
             .map-legend { 
                 position: relative; 
                 bottom: auto; 
                 left: auto; 
                 flex-direction: row; 
                 justify-content: center; 
-                margin-top: 25px;
+                margin-top: 15px;
                 gap: 20px;
             }
         }
+        /* GIỮ NGUYÊN PHẦN CỠ CHỮ CHO MÀN HÌNH SIÊU NHỎ */
         @media screen and (max-width: 500px) {
             .hero-header h1 { font-size: 28px; }
             .stat-number { font-size: 24px; }

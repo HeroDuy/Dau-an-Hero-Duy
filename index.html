@@ -976,23 +976,44 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbzRNf8FOql1A3MWkpGzm-eWp62IA07TjoN4dDIdh8GkfwCwGaRIchdDB5oPKuvrEQ8G/exec";
 let travelData = [];
 const dsTinhThanh = [
-    { id: "VN71", name: "Điện Biên" }, { id: "VN05", name: "Sơn La" }, { id: "VN21", name: "Thanh Hóa" }, 
-    { id: "VN22", name: "Nghệ An" }, { id: "VN23", name: "Hà Tĩnh" }, { id: "VN01", name: "Lai Châu" }, 
-    { id: "VN09", name: "Lạng Sơn" }, { id: "VN13", name: "Quảng Ninh" }, { id: "VN31", name: "Bình Định" }, 
-    { id: "VN53", name: "Đông Bắc" }, { id: "VN66", name: "Đồng Bằng Sông Hồng" }, 
-    { id: "TuyenQuang_Moi", name: "Tuyên Quang (Sáp nhập)" }, { id: "LaoCai_Moi", name: "Lào Cai (Sáp nhập)" }, 
-    { id: "ThaiNguyen_Moi", name: "Thái Nguyên (Sáp nhập)" }, { id: "PhuTho_Moi", name: "Phú Thọ (Sáp nhập)" }, 
-    { id: "BacNinh_Moi", name: "Bắc Ninh (Sáp nhập)" }, { id: "HungYen_Moi", name: "Hưng Yên (Sáp nhập)" }, 
-    { id: "HaiPhong_Moi", name: "Hải Phòng (Sáp nhập)" }, { id: "NinhBinh_Moi", name: "Ninh Bình (Sáp nhập)" }, 
-    { id: "QuangTri_Moi", name: "Quảng Trị (Sáp nhập)" }, { id: "DaNang_Moi", name: "Đà Nẵng (Sáp nhập)" }, 
-    { id: "QuangNgai_Moi", name: "Quảng Ngãi (Sáp nhập)" }, { id: "GiaLai_Moi", name: "Gia Lai (Sáp nhập)" }, 
-    { id: "KhanhHoa_Moi", name: "Khánh Hòa (Sáp nhập)" }, { id: "LamDong_Moi", name: "Lâm Đồng (Sáp nhập)" }, 
-    { id: "DakLak_Moi", name: "Đắk Lắk (Sáp nhập)" }, { id: "HoChiMinh_Moi", name: "TP. Hồ Chí Minh (Sáp nhập)" }, 
-    { id: "DongNai_Moi", name: "Đồng Nai (Sáp nhập)" }, { id: "TayNinh_Moi", name: "Tây Ninh (Sáp nhập)" }, 
-    { id: "CanTho_Moi", name: "Cần Thơ (Sáp nhập)" }, { id: "VinhLong_Moi", name: "Vĩnh Long (Sáp nhập)" }, 
-    { id: "DongThap_Moi", name: "Đồng Tháp (Sáp nhập)" }, { id: "CaMau_Moi", name: "Cà Mau (Sáp nhập)" }, 
-    { id: "AnGiang_Moi", name: "An Giang (Sáp nhập)" }
-];
+            // --- 11 TỈNH / THÀNH PHỐ KHÔNG THỰC HIỆN SẮP XẾP ---
+            { id: "VNHN", name: "TP. Hà Nội" },
+            { id: "VN21", name: "Thanh Hóa" },
+            { id: "VN09", name: "Lạng Sơn" },
+            { id: "VN26", name: "TP. Huế" }, 
+            { id: "VN22", name: "Nghệ An" },
+            { id: "VN23", name: "Hà Tĩnh" },
+            { id: "VN01", name: "Lai Châu" },
+            { id: "VN71", name: "Điện Biên" },
+            { id: "VN04", name: "Cao Bằng" },
+            { id: "VN13", name: "Quảng Ninh" },
+            { id: "VN05", name: "Sơn La" },
+
+            // --- 23 TỈNH / THÀNH PHỐ MỚI (ĐÃ GỘP) ---
+            { id: "TuyenQuang_Moi", name: "Tuyên Quang" },
+            { id: "LaoCai_Moi", name: "Lào Cai" },
+            { id: "ThaiNguyen_Moi", name: "Thái Nguyên" },
+            { id: "PhuTho_Moi", name: "Phú Thọ" },
+            { id: "BacNinh_Moi", name: "Bắc Ninh" },
+            { id: "HungYen_Moi", name: "Hưng Yên" },
+            { id: "HaiPhong_Moi", name: "TP. Hải Phòng" },
+            { id: "NinhBinh_Moi", name: "Ninh Bình" },
+            { id: "QuangTri_Moi", name: "Quảng Trị" },
+            { id: "DaNang_Moi", name: "TP. Đà Nẵng" },
+            { id: "QuangNgai_Moi", name: "Quảng Ngãi" },
+            { id: "GiaLai_Moi", name: "Gia Lai" },
+            { id: "KhanhHoa_Moi", name: "Khánh Hòa" },
+            { id: "LamDong_Moi", name: "Lâm Đồng" },
+            { id: "DakLak_Moi", name: "Đắk Lắk" },
+            { id: "HoChiMinh_Moi", name: "TP. Hồ Chí Minh" },
+            { id: "DongNai_Moi", name: "Đồng Nai" },
+            { id: "TayNinh_Moi", name: "Tây Ninh" },
+            { id: "CanTho_Moi", name: "TP. Cần Thơ" },
+            { id: "VinhLong_Moi", name: "Vĩnh Long" },
+            { id: "DongThap_Moi", name: "Đồng Tháp" },
+            { id: "CaMau_Moi", name: "Cà Mau" },
+            { id: "AnGiang_Moi", name: "An Giang" }
+        ];
 
 document.addEventListener("DOMContentLoaded", function() {
     initMap();
@@ -1169,31 +1190,49 @@ function closeLoginModal() {
 }
 
 function checkPass() {
-    const pass = document.getElementById("adminPass").value;
-    if (pass === "058206") {
-        closeLoginModal();
-        document.getElementById("adminModal").style.display = "flex";
-    } else {
-        alert("Mật khẩu không chính xác!");
-    }
-}
-
+            const pass = document.getElementById("adminPass").value;
+            if (pass === "058206") {
+                closeLoginModal();
+                document.getElementById("adminModal").style.display = "flex";
+                
+                // GỌI HÀM NÀY ĐỂ KHI VỪA MỞ BẢNG LÊN SẼ THẤY NGAY DỮ LIỆU CŨ CỦA TỈNH HIỆN TẠI
+                loadOldDataToForm(); 
+            } else {
+                alert("Mật khẩu không chính xác!");
+            }
+        }
+ 
 function closeAdminModal() { 
     document.getElementById("adminModal").style.display = "none"; 
 }
 
 function populateSelectBox() {
-    const selectBox = document.getElementById("selectTinh");
-    if (!selectBox) return;
-    selectBox.innerHTML = "";
-    dsTinhThanh.sort((a,b) => a.name.localeCompare(b.name)).forEach(tinh => {
-        let option = document.createElement("option");
-        option.value = tinh.id;
-        option.text = tinh.name;
-        selectBox.appendChild(option);
-    });
-}
+            const selectBox = document.getElementById("selectTinh");
+            selectBox.innerHTML = ""; // Làm sạch danh sách
+            dsTinhThanh.sort((a,b) => a.name.localeCompare(b.name)).forEach(tinh => {
+                let option = document.createElement("option");
+                option.value = tinh.id;
+                option.text = tinh.name;
+                selectBox.appendChild(option);
+            });
 
+            // Lắng nghe sự kiện: Bất cứ khi nào bạn đổi tỉnh khác, nó sẽ lấy dữ liệu cũ đắp lên form
+            selectBox.addEventListener("change", loadOldDataToForm);
+        }
+
+        // Hàm tự động điền dữ liệu cũ vào khung nhập liệu để Hero Duy viết tiếp
+        function loadOldDataToForm() {
+            const idTinh = document.getElementById("selectTinh").value;
+            const info = travelData.find(x => x.ID === idTinh);
+            
+            if (info && info.TrangThai.toLowerCase().includes("đã đi")) {
+                document.getElementById("selectTrangThai").value = "Đã đi";
+                document.getElementById("inputNoiDung").value = info.NoiDung || "";
+            } else {
+                document.getElementById("selectTrangThai").value = "Chưa đi";
+                document.getElementById("inputNoiDung").value = "";
+            }
+        }
 // 6. LƯU DỮ LIỆU VÀ ĐỒNG BỘ LÊN GOOGLE SHEETS
 function saveData() {
     const selectBox = document.getElementById("selectTinh");

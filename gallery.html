@@ -106,13 +106,10 @@
                 
                 // Lọc chỉ lấy file ảnh
                 const images = files.filter(file => file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i));
-                
                 const formattedImages = images.map(img => {
-                    // Biến tên file thành caption: "Ngắm-hoàng-hôn.jpg" -> "Ngắm hoàng hôn"
-                    let captionText = decodeURIComponent(img.name).replace(/\.[^/.]+$/, "").replace(/-/g, " ");
                     return {
                         src: img.download_url,
-                        caption: captionText
+                        caption: "" 
                     };
                 });
 

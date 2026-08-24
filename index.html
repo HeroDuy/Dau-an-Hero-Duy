@@ -100,6 +100,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
+
 /* --- BẢN ĐỒ GLASSMORPHISM CARD --- */
 .map-card { 
     background: rgba(255, 255, 255, 0.08); 
@@ -543,6 +544,38 @@
         .splash-btn:not(:disabled):hover {
             transform: translateY(-2px);
         }
+/* --- NÚT BỘ SƯU TẬP ẢNH (CHUẨN TỈ LỆ 1.963:1) --- */
+        .gallery-link-card {
+            display: flex;
+            align-items: flex-end; /* Ép toàn bộ chữ và icon xuống cạnh dưới cùng */
+            justify-content: space-between;
+            /* Gradient đen từ dưới lên để làm nổi chữ, phần trên trong suốt để rõ mặt */
+            background: linear-gradient(to top, rgba(3, 27, 39, 0.95) 0%, rgba(3, 27, 39, 0.1) 50%), url('https://cdn.phototourl.com/free/2026-08-24-2e70f31d-5f06-4a0c-aca7-6dd9025c8ec8.jpg') center/cover no-repeat;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 20px 25px;
+            margin-top: 35px;
+            text-decoration: none;
+            color: var(--white);
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            width: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
+            aspect-ratio: 1.963 / 1; /* KHÓA ĐÚNG TỈ LỆ BẠN YÊU CẦU */
+        }
+        .gallery-link-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--cyan);
+            box-shadow: 0 15px 35px rgba(32, 217, 232, 0.3);
+            background: linear-gradient(to top, rgba(3, 27, 39, 1) 0%, rgba(3, 27, 39, 0.2) 60%), url('https://cdn.phototourl.com/free/2026-08-24-2e70f31d-5f06-4a0c-aca7-6dd9025c8ec8.jpg') center/cover no-repeat;
+        }
+        .gallery-icon { font-size: 32px; margin-right: 15px; margin-bottom: 2px; }
+        .gallery-text { display: flex; flex-direction: column; flex-grow: 1; text-align: left; }
+        .g-title { font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 700; color: var(--cyan); letter-spacing: 0.5px; margin-bottom: 5px; }
+        .g-desc { font-size: 13px; color: rgba(255,255,255,0.9); }
+        .gallery-arrow { font-size: 24px; color: var(--white); font-weight: bold; transition: 0.3s; margin-bottom: 5px; }
+        .gallery-link-card:hover .gallery-arrow { color: var(--cyan); transform: translateX(5px); }
     </style>
 </head>
 <body>
@@ -912,11 +945,20 @@
                 <h4>Liên Hệ Công Việc</h4>
                 <div>
                     <span class="contact-badge">📞 077 6767 179</span>
-                    <span class="contact-badge">💬 Zalo: 058 723 1800</span>
+                
                     <span class="contact-badge">📍 308 Trương Thị Hoa, Q.12, TP.HCM</span>
                 </div>
             </div>
         </div>
+<!-- NÚT MỞ BỘ SƯU TẬP ẢNH (DẠNG BANNER) -->
+            <a href="gallery.html" class="gallery-link-card">
+                <div class="gallery-icon">📸</div>
+                <div class="gallery-text">
+                    <span class="g-title">Khám Phá Dấu Ấn Hero Duy</span>
+                    <span class="g-desc">Chạm vào đây để mở kho ảnh hành trình thực tế</span>
+                </div>
+                <div class="gallery-arrow">→</div>
+            </a>
     </section>
     <!-- KHUNG THÔNG TIN XEM ĐIỂM ĐẾN (PREMIUM DESTINATION CARD) -->
     <div id="infoModal" class="modal">

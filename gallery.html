@@ -24,28 +24,26 @@
         .tab-btn.active { background: linear-gradient(135deg, rgba(32, 217, 232, 0.2), rgba(0, 201, 167, 0.2)); border-color: var(--cyan); color: var(--cyan); box-shadow: 0 5px 15px rgba(32,217,232,0.2); }
 
         /* LƯỚI ẢNH VÀ HIỆU ỨNG POP-IN */
-        .gallery-container { width: 100%; max-width: 1000px; padding: 0 20px 20px 20px; box-sizing: border-box; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
+        .gallery-container { width: 100%; max-width: 1000px; padding: 0 20px 50px 20px; box-sizing: border-box; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
         
         .gallery-item { 
             position: relative; border-radius: 12px; overflow: hidden; cursor: pointer; box-shadow: 0 8px 20px rgba(0,0,0,0.4); 
             aspect-ratio: 1 / 1; 
             opacity: 0; 
-            transform: translateY(40px) scale(0.8); /* Bắt đầu từ vị trí thấp và nhỏ */
+            transform: translateY(40px) scale(0.8); 
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         
-        /* Chạy animation nảy lên khi class .loaded được thêm vào */
         .gallery-item.loaded { animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        
         .gallery-item:hover { transform: scale(1.03) !important; z-index: 2; box-shadow: 0 15px 30px rgba(32,217,232,0.4); }
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: filter 0.4s; }
         .gallery-item:hover img { filter: brightness(1.1); }
         
         /* LOADING */
         .loading-text { width: 100%; text-align: center; font-style: italic; color: var(--cyan); padding: 20px 0; }
-        #scroll-trigger { width: 100%; height: 50px; } /* Mốc cảm biến cuộn */
+        .bottom-spacer { width: 100%; height: 50px; }
 
-        /* LIGHTBOX PHÓNG TO ẢNH (Bỏ text) */
+        /* LIGHTBOX PHÓNG TO ẢNH */
         .lightbox { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(10px); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; opacity: 0; transition: opacity 0.3s; }
         .lightbox.active { display: flex; opacity: 1; }
         .lightbox img { max-width: 95%; max-height: 85vh; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); object-fit: contain; }
@@ -59,7 +57,7 @@
         @media screen and (max-width: 600px) {
             .header { flex-direction: column-reverse; gap: 15px; padding: 20px 10px 10px; align-items: flex-start; }
             .page-title { font-size: 24px; text-align: left; }
-            .gallery-container { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 10px; }
+            .gallery-container { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 10px 30px 10px; }
             .tabs-container { padding: 0 10px; }
         }
     </style>
@@ -81,10 +79,10 @@
     <div class="gallery-container" id="gallery-box"></div>
     <div class="loading-text" id="loading-text">Đang tải ảnh...</div>
     
-    <!-- CẢM BIẾN TỰ ĐỘNG CUỘN -->
-    <div id="scroll-trigger"></div>
+    <!-- Khoảng trống mồi ở đáy -->
+    <div class="bottom-spacer"></div>
 
-    <!-- LIGHTBOX (KHUNG PHÓNG TO TRƠN KHÔNG CHỮ) -->
+    <!-- LIGHTBOX (KHUNG PHÓNG TO) -->
     <div class="lightbox" id="lightbox">
         <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
         <img id="lightbox-img" src="" alt="">
@@ -98,8 +96,8 @@
         let cachedData = { banthan: null, khungcanh: null };
         let currentTab = 'banthan'; 
         let currentIndex = 0; 
-        const imagesPerLoad = 12; // Số ảnh nạp ra mỗi lần vuốt
-        let isFetching = false; // Ngăn chặn load trùng lặp
+        const imagesPerLoad = 12; // Tải 12 tấm mỗi lần lướt
+        let isFetching = false; 
 
         // Hàm gọi API lấy ảnh từ GitHub
         async function fetchImagesFromFolder(folderName) {
@@ -109,7 +107,6 @@
                 if (!response.ok) throw new Error("Thư mục trống");
                 const files = await response.json();
                 
-                // Trả về duy nhất link ảnh (không có caption)
                 const formattedImages = files
                     .filter(file => file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i))
                     .map(img => img.download_url);
@@ -148,9 +145,9 @@
             renderImages(images);
         }
 
-        // Hiển thị ảnh (Nạp từng đợt)
+        // Hiển thị ảnh
         function renderImages(dataList) {
-            if (!dataList || currentIndex >= dataList.length) return;
+            if (!dataList || currentIndex >= dataList.length || isFetching) return;
             isFetching = true;
 
             const galleryBox = document.getElementById('gallery-box');
@@ -158,38 +155,40 @@
             
             for (let i = currentIndex; i < endIndex; i++) {
                 const src = dataList[i];
-                const delay = (i - currentIndex) * 0.1; // Căn nhịp độ cho từng ảnh nảy lên nối tiếp nhau
+                const delay = (i - currentIndex) * 0.1; 
                 const html = `
                     <div class="gallery-item" style="animation-delay: ${delay}s" onclick="openLightbox('${src}')">
                         <img src="${src}" loading="lazy">
                     </div>
                 `;
                 galleryBox.insertAdjacentHTML('beforeend', html);
-                
-                // Mồi animation cho ảnh mới
-                setTimeout(() => {
-                    const items = galleryBox.querySelectorAll('.gallery-item:not(.loaded)');
-                    items.forEach(el => el.classList.add('loaded'));
-                }, 50);
             }
             
+            // Kích hoạt hiệu ứng nảy lên
+            setTimeout(() => {
+                const items = galleryBox.querySelectorAll('.gallery-item:not(.loaded)');
+                items.forEach(el => el.classList.add('loaded'));
+            }, 50);
+            
             currentIndex = endIndex;
-            setTimeout(() => { isFetching = false; }, 500); // Mở khóa sau khi render xong
+            
+            // Khóa chốt an toàn để không bị load trùng
+            setTimeout(() => { isFetching = false; }, 300); 
         }
 
         // ============================================
-        // CẢM BIẾN TỰ ĐỘNG CUỘN (INFINITE SCROLL)
+        // BỘ CẢM BIẾN LƯỚT CHUỘT (CHỐNG KẸT 100%)
         // ============================================
-        const observer = new IntersectionObserver((entries) => {
-            // Khi người dùng cuộn đến cái mốc <div id="scroll-trigger">
-            if (entries[0].isIntersecting && !isFetching) {
+        window.addEventListener('scroll', () => {
+            if (isFetching) return;
+            
+            // Nếu khoảng cách từ màn hình đến đáy web còn dưới 300px -> Gọi thêm ảnh
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300) {
                 if (cachedData[currentTab]) {
                     renderImages(cachedData[currentTab]);
                 }
             }
-        }, { rootMargin: "150px" }); // Kích hoạt sớm khi còn cách đáy 150px
-
-        observer.observe(document.getElementById('scroll-trigger'));
+        });
 
         // Phóng to ảnh (Lightbox)
         function openLightbox(src) {

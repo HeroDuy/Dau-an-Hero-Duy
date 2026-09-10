@@ -15,7 +15,7 @@
         
         /* HEADER VÀ TAB MỤC */
         .header { width: 100%; max-width: 1000px; padding: 30px 20px 10px 20px; box-sizing: border-box; display: flex; justify-content: space-between; align-items: center; }
-        .back-btn { text-decoration: none; color: var(--white); background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); transition: 0.3s; font-weight: 600; font-size: 14px; }
+        .back-btn { text-decoration: none; color: var(--white); background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); transition: 0.3s; font-weight: 600; font-size: 14px; cursor: pointer; }
         .back-btn:hover { background: rgba(32, 217, 232, 0.2); border-color: var(--cyan); color: var(--cyan); }
         .page-title { font-family: 'Outfit', sans-serif; font-size: 28px; margin: 0; text-shadow: 0 0 15px rgba(32,217,232,0.4); text-align: right; }
 
@@ -23,7 +23,7 @@
         .tab-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--white); padding: 12px 25px; border-radius: 30px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; flex: 1; max-width: 200px; }
         .tab-btn.active { background: linear-gradient(135deg, rgba(32, 217, 232, 0.2), rgba(0, 201, 167, 0.2)); border-color: var(--cyan); color: var(--cyan); box-shadow: 0 5px 15px rgba(32,217,232,0.2); }
 
-        /* LƯỚI ẢNH VÀ HIỆU ỨNG POP-IN */
+        /* LƯỚI ẢNH CHUNG */
         .gallery-container { width: 100%; max-width: 1000px; padding: 0 20px 50px 20px; box-sizing: border-box; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
         
         .gallery-item { 
@@ -36,9 +36,23 @@
         
         .gallery-item.loaded { animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
         .gallery-item:hover { transform: scale(1.03) !important; z-index: 2; box-shadow: 0 15px 30px rgba(32,217,232,0.4); }
-        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: filter 0.4s; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.5s ease-in-out, filter 0.4s; }
         .gallery-item:hover img { filter: brightness(1.1); }
         
+        /* TIÊU ĐỀ ALBUM FOLDER */
+        .album-title {
+            position: absolute; bottom: 0; left: 0; width: 100%; padding: 30px 15px 15px; box-sizing: border-box;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700; color: var(--cyan);
+            text-align: center; pointer-events: none;
+        }
+        .album-title small { font-size: 12px; color: rgba(255,255,255,0.8); font-weight: 400; font-family: 'Plus Jakarta Sans', sans-serif;}
+
+        /* KHUNG ALBUM CHI TIẾT */
+        #album-view { display: none; width: 100%; max-width: 1000px; padding: 0 20px; box-sizing: border-box; }
+        .album-header { display: flex; align-items: center; gap: 20px; margin-bottom: 25px; }
+        .album-name { font-family: 'Outfit', sans-serif; font-size: 24px; color: var(--primary); margin: 0; }
+
         /* LOADING */
         .loading-text { width: 100%; text-align: center; font-style: italic; color: var(--cyan); padding: 20px 0; }
         .bottom-spacer { width: 100%; height: 50px; }
@@ -59,6 +73,7 @@
             .page-title { font-size: 24px; text-align: left; }
             .gallery-container { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 10px 30px 10px; }
             .tabs-container { padding: 0 10px; }
+            #album-view { padding: 0 10px; }
         }
     </style>
 </head>
@@ -70,16 +85,28 @@
     </div>
 
     <!-- 2 NÚT TAB -->
-    <div class="tabs-container">
+    <div class="tabs-container" id="tabs-container">
         <button class="tab-btn active" onclick="switchTab('banthan')">👤 Ảnh Bản Thân</button>
         <button class="tab-btn" onclick="switchTab('khungcanh')">⛰️ Khung Cảnh</button>
     </div>
 
-    <!-- VÙNG CHỨA ẢNH -->
-    <div class="gallery-container" id="gallery-box"></div>
-    <div class="loading-text" id="loading-text">Đang tải ảnh...</div>
+    <div class="loading-text" id="loading-text">Đang sắp xếp Album...</div>
+
+    <!-- MÀN HÌNH CHÍNH: LƯỚI ALBUM (FOLDER) -->
+    <div id="gallery-view">
+        <div class="gallery-container" id="gallery-box"></div>
+    </div>
+
+    <!-- MÀN HÌNH PHỤ: CHI TIẾT TRONG 1 ALBUM -->
+    <div id="album-view">
+        <div class="album-header">
+            <button class="back-btn" onclick="closeAlbum()">← Quay lại</button>
+            <h2 class="album-name" id="album-name-display">Tên Album</h2>
+        </div>
+        <div class="gallery-container" id="album-images-box" style="padding: 0;"></div>
+    </div>
     
-    <!-- Khoảng trống mồi ở đáy -->
+    <!-- Cảm biến cuộn -->
     <div class="bottom-spacer"></div>
 
     <!-- LIGHTBOX (KHUNG PHÓNG TO) -->
@@ -92,105 +119,182 @@
         // --- CẤU HÌNH KHO GITHUB CỦA BẠN ---
         const GITHUB_OWNER = "HeroDuy"; 
         const GITHUB_REPO = "Dau-an-Hero-Duy"; 
+        const BRANCH = "main"; 
 
-        let cachedData = { banthan: null, khungcanh: null };
+        // Kho dữ liệu lưu trữ theo cấu trúc: albums['banthan']['Tên Album'] = [link1, link2, ...]
+        let albums = { banthan: {}, khungcanh: {} };
+        let isLoaded = false;
         let currentTab = 'banthan'; 
-        let currentIndex = 0; 
-        const imagesPerLoad = 12; // Tải 12 tấm mỗi lần lướt
-        let isFetching = false; 
+        let slideshowIntervals = [];
 
-        // Hàm gọi API lấy ảnh từ GitHub
-        async function fetchImagesFromFolder(folderName) {
-            if (cachedData[folderName]) return cachedData[folderName]; 
+        // Logic Album Chi tiết
+        let currentAlbumImages = [];
+        let loadedImageCount = 0;
+        const imagesPerLoad = 12;
+        let isFetching = false;
+
+        // Khởi tạo: Lấy toàn bộ cây thư mục GitHub chỉ bằng 1 lần quét duy nhất (Siêu tối ưu)
+        async function initGallery() {
             try {
-                const response = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${folderName}`);
-                if (!response.ok) throw new Error("Thư mục trống");
-                const files = await response.json();
+                const response = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/git/trees/${BRANCH}?recursive=1`);
+                if (!response.ok) throw new Error("Lỗi kết nối");
+                const data = await response.json();
                 
-                const formattedImages = files
-                    .filter(file => file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i))
-                    .map(img => img.download_url);
-
-                cachedData[folderName] = formattedImages;
-                return formattedImages;
+                data.tree.forEach(item => {
+                    // Chỉ lấy file ảnh
+                    if (item.type === "blob" && item.path.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
+                        const parts = item.path.split('/');
+                        const tab = parts[0]; // 'banthan' hoặc 'khungcanh'
+                        
+                        if (tab === 'banthan' || tab === 'khungcanh') {
+                            // Nếu file nằm trong thư mục con, lấy tên thư mục đó. Nếu nằm trơn bên ngoài thì gom vào "Ảnh Khác"
+                            let albumName = parts.length >= 3 ? parts[1] : "Ảnh Khác";
+                            
+                            if (!albums[tab][albumName]) albums[tab][albumName] = [];
+                            
+                            // Tạo link ảnh
+                            const rawUrl = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${BRANCH}/${parts.map(encodeURIComponent).join('/')}`;
+                            albums[tab][albumName].push(rawUrl);
+                        }
+                    }
+                });
+                
+                isLoaded = true;
+                document.getElementById('loading-text').style.display = 'none';
+                switchTab('banthan');
             } catch (error) {
-                console.error("Lỗi:", error);
-                return [];
+                document.getElementById('loading-text').innerText = "Lỗi khi nạp dữ liệu. Vui lòng tải lại trang (F5).";
             }
         }
 
-        // Chuyển Tab
-        async function switchTab(tabName) {
+        // Chuyển Tab (Bản thân / Khung cảnh)
+        function switchTab(tabName) {
+            if (!isLoaded) return;
             currentTab = tabName;
-            currentIndex = 0;
-            const galleryBox = document.getElementById('gallery-box');
-            const loadingText = document.getElementById('loading-text');
             
-            galleryBox.innerHTML = ""; 
-            loadingText.style.display = 'block';
+            // Tắt giao diện Album chi tiết, mở danh sách Folder
+            document.getElementById('album-view').style.display = 'none';
+            document.getElementById('gallery-view').style.display = 'block';
+            document.getElementById('tabs-container').style.display = 'flex';
 
-            // Đổi màu nút Tab
+            // Đổi màu nút
             const btns = document.querySelectorAll('.tab-btn');
             btns[0].classList.toggle('active', tabName === 'banthan');
             btns[1].classList.toggle('active', tabName === 'khungcanh');
 
-            const images = await fetchImagesFromFolder(tabName);
-            loadingText.style.display = 'none';
+            renderAlbumFolders(tabName);
+        }
 
-            if (images.length === 0) {
-                galleryBox.innerHTML = `<div style="grid-column: 1/-1; text-align:center; color:#aaa;">Chưa có ảnh nào. Vui lòng thả ảnh vào thư mục '${tabName}' trên kho GitHub.</div>`;
+        // Tạo ra các khối Album (Folder)
+        function renderAlbumFolders(tabName) {
+            // Dọn dẹp slideshow cũ
+            slideshowIntervals.forEach(clearInterval);
+            slideshowIntervals = [];
+            
+            const container = document.getElementById('gallery-box');
+            container.innerHTML = '';
+            
+            const tabAlbums = albums[tabName];
+            const albumKeys = Object.keys(tabAlbums);
+            
+            if (albumKeys.length === 0) {
+                container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; color:#aaa;">Chưa có dữ liệu. Vui lòng tạo thư mục con bên trong '${tabName}' trên GitHub.</div>`;
                 return;
             }
 
-            renderImages(images);
+            albumKeys.forEach((albumName, index) => {
+                const images = tabAlbums[albumName];
+                const displayName = decodeURIComponent(albumName).replace(/[-_]/g, ' '); // Đổi "Chuyen_Di" thành "Chuyen Di"
+                const safeId = "cover-" + index; 
+                const delay = index * 0.1;
+                
+                const html = `
+                    <div class="gallery-item loaded album-card" style="animation-delay: ${delay}s" onclick="openAlbum('${tabName}', '${albumName}')">
+                        <img id="${safeId}" src="${images[0]}" loading="lazy">
+                        <div class="album-title">${displayName} <br><small>${images.length} ảnh</small></div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', html);
+                
+                // Hiệu ứng luân phiên chuyển ảnh sau 5 giây nếu album có nhiều hơn 1 ảnh
+                if (images.length > 1) {
+                    let idx = 0;
+                    const intv = setInterval(() => {
+                        const imgEl = document.getElementById(safeId);
+                        if (imgEl) {
+                            imgEl.style.opacity = 0.2; // Mờ đi
+                            setTimeout(() => {
+                                idx = (idx + 1) % images.length;
+                                imgEl.src = images[idx];
+                                imgEl.style.opacity = 1; // Rõ lại
+                            }, 500); 
+                        }
+                    }, 5000);
+                    slideshowIntervals.push(intv);
+                }
+            });
         }
 
-        // Hiển thị ảnh
-        function renderImages(dataList) {
-            if (!dataList || currentIndex >= dataList.length || isFetching) return;
+        // Bấm vào 1 Album -> Mở xem chi tiết
+        function openAlbum(tabName, albumName) {
+            document.getElementById('gallery-view').style.display = 'none';
+            document.getElementById('tabs-container').style.display = 'none';
+            document.getElementById('album-view').style.display = 'block';
+            
+            const displayName = decodeURIComponent(albumName).replace(/[-_]/g, ' ');
+            document.getElementById('album-name-display').innerText = displayName;
+            
+            currentAlbumImages = albums[tabName][albumName];
+            loadedImageCount = 0;
+            document.getElementById('album-images-box').innerHTML = ''; 
+            loadMoreAlbumImages();
+        }
+
+        // Đóng Album -> Về màn hình chính
+        function closeAlbum() {
+            document.getElementById('album-view').style.display = 'none';
+            document.getElementById('gallery-view').style.display = 'block';
+            document.getElementById('tabs-container').style.display = 'flex';
+        }
+
+        // Cuộn nạp ảnh bên trong Album chi tiết
+        function loadMoreAlbumImages() {
+            if (loadedImageCount >= currentAlbumImages.length || isFetching) return;
             isFetching = true;
 
-            const galleryBox = document.getElementById('gallery-box');
-            const endIndex = Math.min(currentIndex + imagesPerLoad, dataList.length);
+            const container = document.getElementById('album-images-box');
+            const endIndex = Math.min(loadedImageCount + imagesPerLoad, currentAlbumImages.length);
             
-            for (let i = currentIndex; i < endIndex; i++) {
-                const src = dataList[i];
-                const delay = (i - currentIndex) * 0.1; 
+            for (let i = loadedImageCount; i < endIndex; i++) {
+                const src = currentAlbumImages[i];
+                const delay = (i - loadedImageCount) * 0.1;
                 const html = `
                     <div class="gallery-item" style="animation-delay: ${delay}s" onclick="openLightbox('${src}')">
                         <img src="${src}" loading="lazy">
                     </div>
                 `;
-                galleryBox.insertAdjacentHTML('beforeend', html);
+                container.insertAdjacentHTML('beforeend', html);
             }
             
-            // Kích hoạt hiệu ứng nảy lên
             setTimeout(() => {
-                const items = galleryBox.querySelectorAll('.gallery-item:not(.loaded)');
+                const items = container.querySelectorAll('.gallery-item:not(.loaded)');
                 items.forEach(el => el.classList.add('loaded'));
             }, 50);
-            
-            currentIndex = endIndex;
-            
-            // Khóa chốt an toàn để không bị load trùng
-            setTimeout(() => { isFetching = false; }, 300); 
+
+            loadedImageCount = endIndex;
+            setTimeout(() => { isFetching = false; }, 300);
         }
 
-        // ============================================
-        // BỘ CẢM BIẾN LƯỚT CHUỘT (CHỐNG KẸT 100%)
-        // ============================================
+        // Cảm biến Cuộn
         window.addEventListener('scroll', () => {
-            if (isFetching) return;
-            
-            // Nếu khoảng cách từ màn hình đến đáy web còn dưới 300px -> Gọi thêm ảnh
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300) {
-                if (cachedData[currentTab]) {
-                    renderImages(cachedData[currentTab]);
+            if (document.getElementById('album-view').style.display === 'block') {
+                if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300) {
+                    loadMoreAlbumImages();
                 }
             }
         });
 
-        // Phóng to ảnh (Lightbox)
+        // Phóng to ảnh
         function openLightbox(src) {
             const lightbox = document.getElementById('lightbox');
             document.getElementById('lightbox-img').src = src;
@@ -203,13 +307,12 @@
             document.body.style.overflow = 'auto'; 
             setTimeout(() => document.getElementById('lightbox-img').src = "", 300);
         }
-
         document.getElementById('lightbox').addEventListener('click', function(e) {
             if (e.target === this) closeLightbox();
         });
 
-        // Chạy tab mặc định khi vào web
-        switchTab('banthan');
+        // Kích hoạt
+        initGallery();
 
     </script>
 </body>

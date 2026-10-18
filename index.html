@@ -20,18 +20,18 @@
         }
 
       body { 
-            margin: 0; 
-            padding: 0;
-            min-height: 100vh;
-            font-family: 'Inter', sans-serif; 
-            color: var(--white);
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            /* Dùng lớp phủ màu đen (rgba 0,0,0) với độ mờ 50% để giữ nguyên màu gốc của ảnh */
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
-                        url("https://cdn.phototourl.com/member/2026-10-18-45f5b269-4c78-47e5-b794-e82f7be27d19.jpg") center/cover fixed;
-        }
+    margin: 0; 
+    padding: 0;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif; 
+    color: var(--white);
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    /* Phủ nền đen mờ 85% và canh vị trí center 15% để thấy rõ khuôn mặt */
+    background: linear-gradient(rgba(15, 15, 15, 0.85), rgba(15, 15, 15, 0.85)), 
+                url("https://cdn.phototourl.com/member/2026-10-18-45f5b269-4c78-47e5-b794-e82f7be27d19.jpg") center 15% / cover fixed;
+}
         /* --- HEADER CHUYÊN NGHIỆP --- */
         .hero-header {
             text-align: center;

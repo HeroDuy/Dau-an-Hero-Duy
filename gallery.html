@@ -1,319 +1,1314 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bộ Sưu Tập - Vietnam Travel Explorer</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>Dấu Ấn Hero Duy — Bộ Sưu Tập Hành Trình & Phong Cảnh</title>
+    <!-- Google Fonts: Hiện đại, sắc nét và hỗ trợ tiếng Việt hoàn hảo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        :root { --primary: #00C9A7; --cyan: #20D9E8; --bg-dark: #031B27; --white: #FFFFFF; }
+        /* ==========================================================================
+           1. HỆ THỐNG BIẾN MÀU & CHẾ ĐỘ SÁNG / TỐI (LIGHT / DARK MODE)
+           ========================================================================== */
+        :root {
+            --primary: #00C9A7;
+            --cyan: #20D9E8;
+            --accent-gradient: linear-gradient(135deg, #00C9A7 0%, #20D9E8 100%);
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --radius-sm: 10px;
+            --transition-smooth: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Chế độ Tối (Dark Mode - Mặc định, đồng bộ với trang Bản đồ) */
+        html[data-theme="dark"] {
+            --bg-main: #05131B;
+            --bg-overlay: linear-gradient(180deg, rgba(5, 19, 27, 0.88) 0%, rgba(5, 19, 27, 0.96) 100%);
+            --surface: rgba(15, 34, 47, 0.72);
+            --surface-hover: rgba(22, 48, 66, 0.88);
+            --surface-solid: #0C212E;
+            --nav-bg: rgba(7, 22, 32, 0.78);
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --border-hover: rgba(32, 217, 232, 0.65);
+            --card-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.55);
+            --card-hover-shadow: 0 20px 40px -10px rgba(0, 201, 167, 0.28), 0 0 0 2px rgba(32, 217, 232, 0.6);
+            --skeleton-bg: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.04) 75%);
+        }
+
+        /* Chế độ Sáng (Light Mode - Tối giản kiểu tạp chí nhiếp ảnh) */
+        html[data-theme="light"] {
+            --bg-main: #F4F7F9;
+            --bg-overlay: linear-gradient(180deg, rgba(244, 247, 249, 0.94) 0%, rgba(238, 242, 246, 0.98) 100%);
+            --surface: rgba(255, 255, 255, 0.88);
+            --surface-hover: #FFFFFF;
+            --surface-solid: #FFFFFF;
+            --nav-bg: rgba(255, 255, 255, 0.85);
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-muted: #94A3B8;
+            --border-color: rgba(15, 23, 42, 0.09);
+            --border-hover: rgba(0, 201, 167, 0.8);
+            --card-shadow: 0 10px 28px -6px rgba(15, 23, 42, 0.08);
+            --card-hover-shadow: 0 20px 38px -8px rgba(0, 201, 167, 0.22), 0 0 0 2px #00C9A7;
+            --skeleton-bg: linear-gradient(90deg, rgba(15,23,42,0.04) 25%, rgba(15,23,42,0.09) 50%, rgba(15,23,42,0.04) 75%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
-            margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; color: var(--white);
-            background: linear-gradient(rgba(3, 27, 39, 0.85), rgba(3, 27, 39, 0.95)), url("bg.jpg") center/cover fixed;
-            min-height: 100vh; display: flex; flex-direction: column; align-items: center;
-        }
-        
-        /* HEADER VÀ TAB MỤC */
-        .header { width: 100%; max-width: 1000px; padding: 30px 20px 10px 20px; box-sizing: border-box; display: flex; justify-content: space-between; align-items: center; }
-        .back-btn { text-decoration: none; color: var(--white); background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); transition: 0.3s; font-weight: 600; font-size: 14px; cursor: pointer; }
-        .back-btn:hover { background: rgba(32, 217, 232, 0.2); border-color: var(--cyan); color: var(--cyan); }
-        .page-title { font-family: 'Outfit', sans-serif; font-size: 28px; margin: 0; text-shadow: 0 0 15px rgba(32,217,232,0.4); text-align: right; }
-
-        .tabs-container { display: flex; justify-content: center; gap: 15px; margin: 20px 0 30px 0; width: 100%; padding: 0 20px; box-sizing: border-box; }
-        .tab-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--white); padding: 12px 25px; border-radius: 30px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; flex: 1; max-width: 200px; }
-        .tab-btn.active { background: linear-gradient(135deg, rgba(32, 217, 232, 0.2), rgba(0, 201, 167, 0.2)); border-color: var(--cyan); color: var(--cyan); box-shadow: 0 5px 15px rgba(32,217,232,0.2); }
-
-        /* LƯỚI ẢNH CHUNG */
-        .gallery-container { width: 100%; max-width: 1000px; padding: 0 20px 50px 20px; box-sizing: border-box; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
-        
-        .gallery-item { 
-            position: relative; border-radius: 12px; overflow: hidden; cursor: pointer; box-shadow: 0 8px 20px rgba(0,0,0,0.4); 
-            aspect-ratio: 1 / 1; 
-            opacity: 0; 
-            transform: translateY(40px) scale(0.8); 
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .gallery-item.loaded { animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        .gallery-item:hover { transform: scale(1.03) !important; z-index: 2; box-shadow: 0 15px 30px rgba(32,217,232,0.4); }
-        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.5s ease-in-out, filter 0.4s; }
-        .gallery-item:hover img { filter: brightness(1.1); }
-        
-        /* TIÊU ĐỀ ALBUM FOLDER */
-        .album-title {
-            position: absolute; bottom: 0; left: 0; width: 100%; padding: 30px 15px 15px; box-sizing: border-box;
-            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-            font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700; color: var(--cyan);
-            text-align: center; pointer-events: none;
-        }
-        .album-title small { font-size: 12px; color: rgba(255,255,255,0.8); font-weight: 400; font-family: 'Plus Jakarta Sans', sans-serif;}
-
-        /* KHUNG ALBUM CHI TIẾT */
-        #album-view { display: none; width: 100%; max-width: 1000px; padding: 0 20px; box-sizing: border-box; }
-        .album-header { display: flex; align-items: center; gap: 20px; margin-bottom: 25px; }
-        .album-name { font-family: 'Outfit', sans-serif; font-size: 24px; color: var(--primary); margin: 0; }
-
-        /* LOADING */
-        .loading-text { width: 100%; text-align: center; font-style: italic; color: var(--cyan); padding: 20px 0; }
-        .bottom-spacer { width: 100%; height: 50px; }
-
-        /* LIGHTBOX PHÓNG TO ẢNH */
-        .lightbox { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(10px); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; opacity: 0; transition: opacity 0.3s; }
-        .lightbox.active { display: flex; opacity: 1; }
-        .lightbox img { max-width: 95%; max-height: 85vh; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); object-fit: contain; }
-        .lightbox-close { position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer; transition: 0.3s; }
-        .lightbox-close:hover { color: #ff4d4d; }
-
-        @keyframes popIn { 
-            to { opacity: 1; transform: translateY(0) scale(1); } 
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-main);
+            background-image: var(--bg-overlay), url("bg.jpg");
+            background-position: center;
+            background-size: cover;
+            background-attachment: fixed;
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: background-color 0.4s ease, color 0.4s ease;
+            overflow-x: hidden;
         }
 
-        @media screen and (max-width: 600px) {
-            .header { flex-direction: column-reverse; gap: 15px; padding: 20px 10px 10px; align-items: flex-start; }
-            .page-title { font-size: 24px; text-align: left; }
-            .gallery-container { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 10px 30px 10px; }
-            .tabs-container { padding: 0 10px; }
-            #album-view { padding: 0 10px; }
+        /* ==========================================================================
+           2. THANH MENU NHỎ GỌN (STICKY GLASS NAVBAR)
+           ========================================================================== */
+        .navbar {
+            position: sticky;
+            top: 16px;
+            z-index: 100;
+            width: calc(100% - 32px);
+            max-width: 1240px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 999px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition-smooth);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back-map-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: var(--transition-smooth);
+        }
+
+        .back-map-btn:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+            transform: translateX(-2px);
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
+        .brand-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            box-shadow: 0 0 12px var(--primary);
+        }
+
+        .brand-title {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(90deg, var(--text-primary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stat-pill {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            padding: 7px 14px;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .stat-pill strong {
+            color: var(--primary);
+        }
+
+        /* Nút bật/tắt Dark Mode */
+        .theme-toggle-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+            background: var(--surface);
+            color: var(--text-primary);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 17px;
+            transition: var(--transition-smooth);
+        }
+
+        .theme-toggle-btn:hover {
+            border-color: var(--primary);
+            transform: rotate(15deg) scale(1.06);
+            box-shadow: 0 0 15px rgba(0, 201, 167, 0.25);
+        }
+
+        /* ==========================================================================
+           3. HERO BANNER TỐI GIẢN & BỘ LỌC DANH MỤC
+           ========================================================================== */
+        .hero-section {
+            width: 100%;
+            max-width: 1240px;
+            padding: 42px 24px 20px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .hero-heading {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            font-size: clamp(26px, 4vw, 40px);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .hero-sub {
+            font-size: 15px;
+            color: var(--text-secondary);
+            max-width: 580px;
+            margin: 0 auto 28px;
+            line-height: 1.6;
+        }
+
+        /* Thanh điều khiển Danh mục & Chế độ hiển thị */
+        .controls-bar {
+            width: 100%;
+            max-width: 1240px;
+            padding: 0 24px;
+            margin-bottom: 24px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+        }
+
+        .tabs-group {
+            display: inline-flex;
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            padding: 5px;
+            border-radius: 999px;
+            backdrop-filter: blur(12px);
+            gap: 4px;
+        }
+
+        .tab-btn {
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            padding: 9px 20px;
+            border-radius: 999px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            background: var(--accent-gradient);
+            color: #031B27;
+            font-weight: 700;
+            box-shadow: 0 4px 16px rgba(0, 201, 167, 0.35);
+        }
+
+        /* Bộ lọc Album nhanh (Pills) */
+        .album-pills-wrapper {
+            width: 100%;
+            max-width: 1240px;
+            padding: 0 24px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            padding-bottom: 4px;
+        }
+
+        .album-pills-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+
+        .album-pill {
+            flex-shrink: 0;
+            border: 1px solid var(--border-color);
+            background: var(--surface);
+            color: var(--text-secondary);
+            padding: 7px 15px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .album-pill:hover {
+            border-color: var(--primary);
+            color: var(--text-primary);
+        }
+
+        .album-pill.active {
+            background: rgba(0, 201, 167, 0.15);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .album-pill .count {
+            font-size: 11px;
+            opacity: 0.75;
+            background: rgba(128, 128, 128, 0.15);
+            padding: 1px 7px;
+            border-radius: 99px;
+        }
+
+        .view-mode-group {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mode-btn {
+            border: 1px solid var(--border-color);
+            background: var(--surface);
+            color: var(--text-secondary);
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mode-btn.active, .mode-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* ==========================================================================
+           4. BỐ CỤC LƯỚI TỰ DO (MASONRY GRID) & DANH SÁCH ALBUM
+           ========================================================================== */
+        .main-container {
+            width: 100%;
+            max-width: 1240px;
+            padding: 0 24px 80px;
+            flex: 1;
+        }
+
+        /* Lưới Masonry tự do ghép khít các khung ảnh lớn nhỏ theo đúng tỉ lệ gốc */
+        .masonry-grid {
+            column-count: 4;
+            column-gap: 18px;
+            width: 100%;
+        }
+
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 18px;
+            position: relative;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            background: var(--surface);
+            border: 1.5px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+            cursor: zoom-in;
+            transform: translateY(0);
+            transition: var(--transition-smooth);
+            animation: cardFadeUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+        }
+
+        /* Hiệu ứng khi di chuột vào ảnh: Viền phát sáng & chuyển động mượt */
+        .masonry-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--border-hover);
+            box-shadow: var(--card-hover-shadow);
+            z-index: 2;
+        }
+
+        .masonry-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+            background: var(--skeleton-bg);
+            background-size: 200% 100%;
+            min-height: 140px;
+        }
+
+        .masonry-item:hover img {
+            transform: scale(1.045);
+            filter: brightness(1.05);
+        }
+
+        /* Lớp phủ thông tin tinh tế khi di chuột vào ảnh */
+        .photo-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(3, 18, 26, 0.85) 0%, rgba(3, 18, 26, 0.2) 45%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 16px;
+            pointer-events: none;
+        }
+
+        .masonry-item:hover .photo-overlay {
+            opacity: 1;
+        }
+
+        .photo-album-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            width: fit-content;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--cyan);
+            background: rgba(3, 27, 39, 0.75);
+            backdrop-filter: blur(6px);
+            padding: 4px 10px;
+            border-radius: 99px;
+            border: 1px solid rgba(32, 217, 232, 0.3);
+            margin-bottom: 4px;
+        }
+
+        .photo-caption {
+            font-size: 13px;
+            color: #FFFFFF;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* ==========================================================================
+           5. LƯỚI THƯ MỤC ALBUM (KHI CHỌN CHẾ ĐỘ XEM THEO ALBUM)
+           ========================================================================== */
+        .albums-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+            width: 100%;
+        }
+
+        .album-card {
+            position: relative;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            aspect-ratio: 4 / 3;
+            cursor: pointer;
+            background: var(--surface);
+            border: 1.5px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+            transition: var(--transition-smooth);
+            animation: cardFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+        }
+
+        /* Tạo điểm nhấn xen kẽ lớn nhỏ cho lưới Album */
+        .album-card:nth-child(5n + 1) {
+            grid-column: span 1;
+        }
+
+        .album-card:hover {
+            transform: translateY(-6px) scale(1.01);
+            border-color: var(--border-hover);
+            box-shadow: var(--card-hover-shadow);
+        }
+
+        .album-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s ease, opacity 0.45s ease;
+        }
+
+        .album-card:hover img {
+            transform: scale(1.07);
+        }
+
+        .album-card-info {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(4, 17, 25, 0.92) 0%, rgba(4, 17, 25, 0.25) 55%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px;
+        }
+
+        .album-card-title {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .album-card-meta {
+            font-size: 13px;
+            color: var(--cyan);
+            font-weight: 600;
+        }
+
+        /* ==========================================================================
+           6. LIGHTBOX PHÓNG TO ẢNH GIỮA MÀN HÌNH (CHUYÊN NGHIỆP)
+           ========================================================================== */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(3, 12, 18, 0.92);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            user-select: none;
+        }
+
+        .lightbox.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .lightbox-Stage {
+            position: relative;
+            max-width: 92vw;
+            max-height: 84vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-img {
+            max-width: 92vw;
+            max-height: 80vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: var(--radius-md);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            transform: scale(0.92);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .lightbox.active .lightbox-img {
+            transform: scale(1);
+        }
+
+        .lightbox-img.zoomed {
+            transform: scale(1.45);
+            cursor: zoom-out;
+        }
+
+        /* Thanh công cụ trên cùng của Lightbox */
+        .lightbox-topbar {
+            position: absolute;
+            top: 20px;
+            left: 24px;
+            right: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 10;
+        }
+
+        .lightbox-counter {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #FFFFFF;
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        .lightbox-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .lb-icon-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: #FFFFFF;
+            font-size: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            text-decoration: none;
+        }
+
+        .lb-icon-btn:hover {
+            background: var(--primary);
+            color: #031B27;
+            border-color: var(--primary);
+            transform: scale(1.08);
+        }
+
+        /* Nút điều hướng Trước / Sau trong Lightbox */
+        .lb-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: #FFFFFF;
+            font-size: 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            z-index: 10;
+        }
+
+        .lb-nav-btn:hover {
+            background: var(--primary);
+            color: #031B27;
+            border-color: var(--primary);
+        }
+
+        .lb-prev { left: 24px; }
+        .lb-next { right: 24px; }
+
+        .lightbox-caption-bar {
+            margin-top: 14px;
+            text-align: center;
+            color: #E2E8F0;
+            font-size: 14px;
+            font-weight: 500;
+            background: rgba(15, 34, 47, 0.75);
+            padding: 8px 20px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        /* ==========================================================================
+           7. TRẠNG THÁI ĐANG TẢI & NÚT TẢI THÊM
+           ========================================================================== */
+        .status-box {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        .load-more-wrap {
+            text-align: center;
+            margin-top: 32px;
+        }
+
+        .load-more-btn {
+            background: var(--surface);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 12px 28px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .load-more-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes cardFadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ==========================================================================
+           8. TỰ ĐỘNG CĂN CHỈNH TRÊN MÁY TÍNH BẢNG & ĐIỆN THOẠI (RESPONSIVE)
+           ========================================================================== */
+        @media screen and (max-width: 1024px) {
+            .masonry-grid {
+                column-count: 3;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            body {
+                background-attachment: scroll;
+            }
+            .navbar {
+                top: 10px;
+                width: calc(100% - 20px);
+                padding: 8px 14px;
+            }
+            .stat-pill {
+                display: none;
+            }
+            .brand-title {
+                font-size: 16px;
+            }
+            .hero-section {
+                padding: 28px 16px 14px;
+            }
+            .controls-bar {
+                padding: 0 16px;
+                justify-content: center;
+            }
+            .album-pills-wrapper {
+                padding: 0 16px;
+            }
+            .main-container {
+                padding: 0 16px 60px;
+            }
+            .masonry-grid {
+                column-count: 2;
+                column-gap: 12px;
+            }
+            .masonry-item {
+                margin-bottom: 12px;
+                border-radius: 12px;
+            }
+            /* Luôn hiện nhãn album nhẹ nhàng trên điện thoại */
+            .photo-overlay {
+                opacity: 1;
+                background: linear-gradient(to top, rgba(3, 18, 26, 0.7) 0%, transparent 45%);
+                padding: 10px;
+            }
+            .lb-nav-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+            .lb-prev { left: 10px; }
+            .lb-next { right: 10px; }
+        }
+
+        @media screen and (max-width: 420px) {
+            .back-map-btn span {
+                display: none;
+            }
+            .tab-btn {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <a href="index.html" class="back-btn">← Về Bản Đồ</a>
-        <h1 class="page-title">Khoảnh Khắc Hành Trình 📸</h1>
-    </div>
-
-    <!-- 2 NÚT TAB -->
-    <div class="tabs-container" id="tabs-container">
-        <button class="tab-btn active" onclick="switchTab('banthan')">👤 Ảnh Bản Thân</button>
-        <button class="tab-btn" onclick="switchTab('khungcanh')">⛰️ Khung Cảnh</button>
-    </div>
-
-    <div class="loading-text" id="loading-text">Đang sắp xếp Album...</div>
-
-    <!-- MÀN HÌNH CHÍNH: LƯỚI ALBUM (FOLDER) -->
-    <div id="gallery-view">
-        <div class="gallery-container" id="gallery-box"></div>
-    </div>
-
-    <!-- MÀN HÌNH PHỤ: CHI TIẾT TRONG 1 ALBUM -->
-    <div id="album-view">
-        <div class="album-header">
-            <button class="back-btn" onclick="closeAlbum()">← Quay lại</button>
-            <h2 class="album-name" id="album-name-display">Tên Album</h2>
+    <!-- 1. THANH MENU NHỎ GỌN (STICKY NAVBAR) -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="index.html" class="back-map-btn" title="Quay về trang Bản Đồ Hành Trình">
+                ← <span>Về Bản Đồ</span>
+            </a>
+            <div class="brand-logo" onclick="resetToAll()">
+                <span class="brand-dot"></span>
+                <span class="brand-title">Dấu Ấn Hero Duy</span>
+            </div>
         </div>
-        <div class="gallery-container" id="album-images-box" style="padding: 0;"></div>
-    </div>
-    
-    <!-- Cảm biến cuộn -->
-    <div class="bottom-spacer"></div>
 
-    <!-- LIGHTBOX (KHUNG PHÓNG TO) -->
-    <div class="lightbox" id="lightbox">
-        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
-        <img id="lightbox-img" src="" alt="">
+        <div class="nav-right">
+            <div class="stat-pill" id="total-counter-pill">
+                Đã tải <strong id="total-photos-num">0</strong> khoảnh khắc
+            </div>
+            <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()" title="Bật/Tắt chế độ nền tối (Dark Mode)">
+                ☀️
+            </button>
+        </div>
+    </nav>
+
+    <!-- 2. TIÊU ĐỀ TRANG -->
+    <header class="hero-section">
+        <div class="hero-badge">✦ PERSONAL VISUAL ARCHIVE ✦</div>
+        <h1 class="hero-heading">Khoảnh Khắc Hành Trình 📸</h1>
+        <p class="hero-sub">Lưu giữ những cung đường, vùng đất và góc nhìn cá nhân của Hero Duy qua ống kính.</p>
+    </header>
+
+    <!-- 3. THANH CHUYỂN CHỦ ĐỀ & CHẾ ĐỘ XEM -->
+    <section class="controls-bar">
+        <div class="tabs-group">
+            <button class="tab-btn active" id="tab-all" onclick="switchCategory('all')">
+                ✨ Tất Cả Ảnh
+            </button>
+            <button class="tab-btn" id="tab-banthan" onclick="switchCategory('banthan')">
+                👤 Ảnh Bản Thân
+            </button>
+            <button class="tab-btn" id="tab-khungcanh" onclick="switchCategory('khungcanh')">
+                ⛰️ Khung Cảnh
+            </button>
+        </div>
+
+        <div class="view-mode-group">
+            <button class="mode-btn active" id="mode-masonry" onclick="setDisplayMode('masonry')">
+                ⊞ Lưới Tự Do (Masonry)
+            </button>
+            <button class="mode-btn" id="mode-albums" onclick="setDisplayMode('albums')">
+                📁 Xem Theo Album
+            </button>
+        </div>
+    </section>
+
+    <!-- Thanh lọc nhanh theo từng Album con -->
+    <div class="album-pills-wrapper" id="album-pills-bar"></div>
+
+    <!-- 4. KHU VỰC HIỂN THỊ ẢNH CHÍNH -->
+    <main class="main-container">
+        <!-- Trạng thái đang tải -->
+        <div class="status-box" id="loading-box">
+            <div class="spinner"></div>
+            <div>Đang đồng bộ kho ảnh từ GitHub của Hero Duy...</div>
+        </div>
+
+        <!-- Khung Lưới Masonry Tự Do -->
+        <div class="masonry-grid" id="masonry-box" style="display: none;"></div>
+
+        <!-- Khung Xem Theo Thư Mục Album -->
+        <div class="albums-grid" id="albums-box" style="display: none;"></div>
+
+        <!-- Nút xem thêm ảnh khi cuộn -->
+        <div class="load-more-wrap" id="load-more-wrap" style="display: none;">
+            <button class="load-more-btn" onclick="renderMoreMasonryItems()">
+                Xem thêm ảnh ↓
+            </button>
+        </div>
+    </main>
+
+    <!-- 5. LIGHTBOX PHÓNG TO ẢNH GIỮA MÀN HÌNH -->
+    <div class="lightbox" id="lightbox" onclick="handleLightboxBackdrop(event)">
+        <div class="lightbox-topbar">
+            <div class="lightbox-counter" id="lb-counter">1 / 1</div>
+            <div class="lightbox-actions">
+                <button class="lb-icon-btn" onclick="toggleZoomLightbox(event)" title="Phóng to / Thu nhỏ">🔍</button>
+                <a class="lb-icon-btn" id="lb-download" href="#" target="_blank" rel="noopener" title="Xem ảnh gốc">↗</a>
+                <button class="lb-icon-btn" onclick="closeLightbox()" title="Đóng (ESC)">✕</button>
+            </div>
+        </div>
+
+        <button class="lb-nav-btn lb-prev" onclick="navigateLightbox(-1, event)" title="Ảnh trước (←)">❮</button>
+
+        <div class="lightbox-Stage">
+            <img class="lightbox-img" id="lightbox-img" src="" alt="Dấu ấn Hero Duy">
+            <div class="lightbox-caption-bar" id="lb-caption">Album Hành Trình</div>
+        </div>
+
+        <button class="lb-nav-btn lb-next" onclick="navigateLightbox(1, event)" title="Ảnh tiếp theo (→)">❯</button>
     </div>
 
     <script>
-        // --- CẤU HÌNH KHO GITHUB CỦA BẠN ---
-        const GITHUB_OWNER = "HeroDuy"; 
-        const GITHUB_REPO = "Dau-an-Hero-Duy"; 
-        const BRANCH = "main"; 
+        /* ==========================================================================
+           CẤU HÌNH KHO ẢNH GITHUB CỦA HERO DUY
+           ========================================================================== */
+        const GITHUB_OWNER = "HeroDuy";
+        const GITHUB_REPO = "Dau-an-Hero-Duy";
+        const BRANCH = "main";
 
-        // Kho dữ liệu lưu trữ theo cấu trúc: albums['banthan']['Tên Album'] = [link1, link2, ...]
+        // Dữ liệu lưu trữ toàn bộ ảnh và album
         let albums = { banthan: {}, khungcanh: {} };
-        let isLoaded = false;
-        let currentTab = 'banthan'; 
-        let slideshowIntervals = [];
+        let allPhotosFlat = []; // Danh sách phẳng dùng cho Masonry Grid & Lightbox
+        let filteredPhotos = []; // Danh sách ảnh đang hiển thị theo bộ lọc hiện tại
 
-        // Logic Album Chi tiết
-        let currentAlbumImages = [];
-        let loadedImageCount = 0;
-        const imagesPerLoad = 12;
-        let isFetching = false;
+        let currentCategory = "all";     // 'all' | 'banthan' | 'khungcanh'
+        let currentAlbumFilter = "ALL";  // 'ALL' hoặc tên Album cụ thể
+        let displayMode = "masonry";     // 'masonry' | 'albums'
 
-        // Khởi tạo: Lấy toàn bộ cây thư mục GitHub chỉ bằng 1 lần quét duy nhất (Siêu tối ưu)
+        // Phân trang thông minh giúp trang mượt mà khi có hàng trăm ảnh
+        let renderedCount = 0;
+        const BATCH_SIZE = 18;
+        let currentLightboxIndex = 0;
+        let slideshowTimers = [];
+
+        /* ==========================================================================
+           1. CHẾ ĐỘ SÁNG / TỐI (DARK / LIGHT MODE)
+           ========================================================================== */
+        function initTheme() {
+            const savedTheme = localStorage.getItem("heroDuyGalleryTheme") || "dark";
+            document.documentElement.setAttribute("data-theme", savedTheme);
+            updateThemeButtonIcon(savedTheme);
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute("data-theme");
+            const next = current === "dark" ? "light" : "dark";
+            document.documentElement.setAttribute("data-theme", next);
+            localStorage.setItem("heroDuyGalleryTheme", next);
+            updateThemeButtonIcon(next);
+        }
+
+        function updateThemeButtonIcon(theme) {
+            const btn = document.getElementById("theme-toggle");
+            btn.innerHTML = theme === "dark" ? "☀️" : "🌙";
+            btn.title = theme === "dark" ? "Chuyển sang nền Sáng" : "Chuyển sang nền Tối";
+        }
+
+        initTheme();
+
+        /* ==========================================================================
+           2. TẢI DỮ LIỆU ẢNH TỪ GITHUB API
+           ========================================================================== */
         async function initGallery() {
             try {
-                const response = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/git/trees/${BRANCH}?recursive=1`);
-                if (!response.ok) throw new Error("Lỗi kết nối");
+                const response = await fetch(
+                    `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/git/trees/${BRANCH}?recursive=1`
+                );
+                if (!response.ok) throw new Error("Không thể kết nối GitHub API");
                 const data = await response.json();
-                
+
+                allPhotosFlat = [];
+                albums = { banthan: {}, khungcanh: {} };
+
                 data.tree.forEach(item => {
-                    // Chỉ lấy file ảnh
-                    if (item.type === "blob" && item.path.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
-                        const parts = item.path.split('/');
+                    if (item.type === "blob" && /\.(jpg|jpeg|png|gif|webp)$/i.test(item.path)) {
+                        const parts = item.path.split("/");
                         const tab = parts[0]; // 'banthan' hoặc 'khungcanh'
-                        
-                        if (tab === 'banthan' || tab === 'khungcanh') {
-                            // Nếu file nằm trong thư mục con, lấy tên thư mục đó. Nếu nằm trơn bên ngoài thì gom vào "Ảnh Khác"
-                            let albumName = parts.length >= 3 ? parts[1] : "Ảnh Khác";
-                            
-                            if (!albums[tab][albumName]) albums[tab][albumName] = [];
-                            
-                            // Tạo link ảnh
-                            const rawUrl = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${BRANCH}/${parts.map(encodeURIComponent).join('/')}`;
+
+                        if (tab === "banthan" || tab === "khungcanh") {
+                            const albumName = parts.length >= 3 ? parts[1] : "Khoảnh Khắc Khác";
+                            if (!albums[tab][albumName]) {
+                                albums[tab][albumName] = [];
+                            }
+
+                            const rawUrl = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${BRANCH}/${parts.map(encodeURIComponent).join("/")}`;
+                            const cleanAlbumTitle = decodeURIComponent(albumName).replace(/[-_]/g, " ");
+
                             albums[tab][albumName].push(rawUrl);
+                            allPhotosFlat.push({
+                                url: rawUrl,
+                                category: tab,
+                                albumKey: albumName,
+                                albumTitle: cleanAlbumTitle,
+                                categoryLabel: tab === "banthan" ? "Ảnh Bản Thân" : "Khung Cảnh"
+                            });
                         }
                     }
                 });
-                
-                isLoaded = true;
-                document.getElementById('loading-text').style.display = 'none';
-                switchTab('banthan');
+
+                document.getElementById("total-photos-num").innerText = allPhotosFlat.length;
+                document.getElementById("loading-box").style.display = "none";
+
+                applyFilterAndRender();
             } catch (error) {
-                document.getElementById('loading-text').innerText = "Lỗi khi nạp dữ liệu. Vui lòng tải lại trang (F5).";
+                console.warn("Lỗi tải GitHub API:", error);
+                document.getElementById("loading-box").innerHTML = `
+                    <p style="margin-bottom: 12px;">Không thể tải danh sách ảnh ngay lúc này (hoặc vượt giới hạn mạng).</p>
+                    <button class="load-more-btn" onclick="location.reload()">Tải lại trang</button>
+                `;
             }
         }
 
-        // Chuyển Tab (Bản thân / Khung cảnh)
-        function switchTab(tabName) {
-            if (!isLoaded) return;
-            currentTab = tabName;
-            
-            // Tắt giao diện Album chi tiết, mở danh sách Folder
-            document.getElementById('album-view').style.display = 'none';
-            document.getElementById('gallery-view').style.display = 'block';
-            document.getElementById('tabs-container').style.display = 'flex';
+        /* ==========================================================================
+           3. BỘ LỌC DANH MỤC, ALBUM & CHẾ ĐỘ HIỂN THỊ
+           ========================================================================== */
+        function switchCategory(cat) {
+            currentCategory = cat;
+            currentAlbumFilter = "ALL";
 
-            // Đổi màu nút
-            const btns = document.querySelectorAll('.tab-btn');
-            btns[0].classList.toggle('active', tabName === 'banthan');
-            btns[1].classList.toggle('active', tabName === 'khungcanh');
+            document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+            document.getElementById(`tab-${cat}`).classList.add("active");
 
-            renderAlbumFolders(tabName);
+            applyFilterAndRender();
         }
 
-        // Tạo ra các khối Album (Folder)
-        function renderAlbumFolders(tabName) {
-            // Dọn dẹp slideshow cũ
-            slideshowIntervals.forEach(clearInterval);
-            slideshowIntervals = [];
-            
-            const container = document.getElementById('gallery-box');
-            container.innerHTML = '';
-            
-            const tabAlbums = albums[tabName];
-            const albumKeys = Object.keys(tabAlbums);
-            
-            if (albumKeys.length === 0) {
-                container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; color:#aaa;">Chưa có dữ liệu. Vui lòng tạo thư mục con bên trong '${tabName}' trên GitHub.</div>`;
+        function setDisplayMode(mode) {
+            displayMode = mode;
+            document.getElementById("mode-masonry").classList.toggle("active", mode === "masonry");
+            document.getElementById("mode-albums").classList.toggle("active", mode === "albums");
+            applyFilterAndRender();
+        }
+
+        function selectAlbumPill(albumKey) {
+            currentAlbumFilter = albumKey;
+            if (displayMode === "albums" && albumKey !== "ALL") {
+                displayMode = "masonry";
+                document.getElementById("mode-masonry").classList.add("active");
+                document.getElementById("mode-albums").classList.remove("active");
+            }
+            applyFilterAndRender();
+        }
+
+        function resetToAll() {
+            displayMode = "masonry";
+            document.getElementById("mode-masonry").classList.add("active");
+            document.getElementById("mode-albums").classList.remove("active");
+            switchCategory("all");
+        }
+
+        function renderAlbumPills() {
+            const bar = document.getElementById("album-pills-bar");
+            bar.innerHTML = "";
+
+            // Gom các album thuộc danh mục đang chọn
+            const albumCounts = {};
+            const targetCategories = currentCategory === "all" ? ["banthan", "khungcanh"] : [currentCategory];
+
+            let totalInCat = 0;
+            targetCategories.forEach(cat => {
+                Object.entries(albums[cat] || {}).forEach(([albumKey, list]) => {
+                    albumCounts[albumKey] = (albumCounts[albumKey] || 0) + list.length;
+                    totalInCat += list.length;
+                });
+            });
+
+            const keys = Object.keys(albumCounts);
+            if (keys.length <= 1) {
+                bar.style.display = "none";
                 return;
             }
+            bar.style.display = "flex";
 
-            albumKeys.forEach((albumName, index) => {
-                const images = tabAlbums[albumName];
-                const displayName = decodeURIComponent(albumName).replace(/[-_]/g, ' '); // Đổi "Chuyen_Di" thành "Chuyen Di"
-                const safeId = "cover-" + index; 
-                const delay = index * 0.1;
-                
-                const html = `
-                    <div class="gallery-item loaded album-card" style="animation-delay: ${delay}s" onclick="openAlbum('${tabName}', '${albumName}')">
-                        <img id="${safeId}" src="${images[0]}" loading="lazy">
-                        <div class="album-title">${displayName} <br><small>${images.length} ảnh</small></div>
-                    </div>
-                `;
-                container.insertAdjacentHTML('beforeend', html);
-                
-                // Hiệu ứng luân phiên chuyển ảnh sau 5 giây nếu album có nhiều hơn 1 ảnh
-                if (images.length > 1) {
-                    let idx = 0;
-                    const intv = setInterval(() => {
-                        const imgEl = document.getElementById(safeId);
-                        if (imgEl) {
-                            imgEl.style.opacity = 0.2; // Mờ đi
-                            setTimeout(() => {
-                                idx = (idx + 1) % images.length;
-                                imgEl.src = images[idx];
-                                imgEl.style.opacity = 1; // Rõ lại
-                            }, 500); 
-                        }
-                    }, 5000);
-                    slideshowIntervals.push(intv);
-                }
+            // Nút "Tất cả album"
+            const allPill = document.createElement("button");
+            allPill.className = `album-pill ${currentAlbumFilter === "ALL" ? "active" : ""}`;
+            allPill.innerHTML = `Tất cả <span class="count">${totalInCat}</span>`;
+            allPill.onclick = () => selectAlbumPill("ALL");
+            bar.appendChild(allPill);
+
+            keys.forEach(albumKey => {
+                const cleanName = decodeURIComponent(albumKey).replace(/[-_]/g, " ");
+                const btn = document.createElement("button");
+                btn.className = `album-pill ${currentAlbumFilter === albumKey ? "active" : ""}`;
+                btn.innerHTML = `📍 ${cleanName} <span class="count">${albumCounts[albumKey]}</span>`;
+                btn.onclick = () => selectAlbumPill(albumKey);
+                bar.appendChild(btn);
             });
         }
 
-        // Bấm vào 1 Album -> Mở xem chi tiết
-        function openAlbum(tabName, albumName) {
-            document.getElementById('gallery-view').style.display = 'none';
-            document.getElementById('tabs-container').style.display = 'none';
-            document.getElementById('album-view').style.display = 'block';
-            
-            const displayName = decodeURIComponent(albumName).replace(/[-_]/g, ' ');
-            document.getElementById('album-name-display').innerText = displayName;
-            
-            currentAlbumImages = albums[tabName][albumName];
-            loadedImageCount = 0;
-            document.getElementById('album-images-box').innerHTML = ''; 
-            loadMoreAlbumImages();
+        function applyFilterAndRender() {
+            // Dọn dẹp bộ đếm slideshow cũ
+            slideshowTimers.forEach(clearInterval);
+            slideshowTimers = [];
+
+            renderAlbumPills();
+
+            const masonryBox = document.getElementById("masonry-box");
+            const albumsBox = document.getElementById("albums-box");
+            const loadMoreWrap = document.getElementById("load-more-wrap");
+
+            if (displayMode === "albums") {
+                masonryBox.style.display = "none";
+                loadMoreWrap.style.display = "none";
+                albumsBox.style.display = "grid";
+                renderAlbumsGrid();
+            } else {
+                albumsBox.style.display = "none";
+                masonryBox.style.display = "block";
+
+                // Lọc danh sách ảnh
+                filteredPhotos = allPhotosFlat.filter(item => {
+                    const matchCat = currentCategory === "all" || item.category === currentCategory;
+                    const matchAlbum = currentAlbumFilter === "ALL" || item.albumKey === currentAlbumFilter;
+                    return matchCat && matchAlbum;
+                });
+
+                masonryBox.innerHTML = "";
+                renderedCount = 0;
+                renderMoreMasonryItems();
+            }
         }
 
-        // Đóng Album -> Về màn hình chính
-        function closeAlbum() {
-            document.getElementById('album-view').style.display = 'none';
-            document.getElementById('gallery-view').style.display = 'block';
-            document.getElementById('tabs-container').style.display = 'flex';
-        }
+        /* ==========================================================================
+           4. HIỂN THỊ LƯỚI TỰ DO (MASONRY GRID)
+           ========================================================================== */
+        function renderMoreMasonryItems() {
+            const masonryBox = document.getElementById("masonry-box");
+            const loadMoreWrap = document.getElementById("load-more-wrap");
 
-        // Cuộn nạp ảnh bên trong Album chi tiết
-        function loadMoreAlbumImages() {
-            if (loadedImageCount >= currentAlbumImages.length || isFetching) return;
-            isFetching = true;
+            if (filteredPhotos.length === 0) {
+                masonryBox.innerHTML = `<div class="status-box">Chưa có bức ảnh nào trong mục này.</div>`;
+                loadMoreWrap.style.display = "none";
+                return;
+            }
 
-            const container = document.getElementById('album-images-box');
-            const endIndex = Math.min(loadedImageCount + imagesPerLoad, currentAlbumImages.length);
-            
-            for (let i = loadedImageCount; i < endIndex; i++) {
-                const src = currentAlbumImages[i];
-                const delay = (i - loadedImageCount) * 0.1;
-                const html = `
-                    <div class="gallery-item" style="animation-delay: ${delay}s" onclick="openLightbox('${src}')">
-                        <img src="${src}" loading="lazy">
+            const nextEnd = Math.min(renderedCount + BATCH_SIZE, filteredPhotos.length);
+
+            for (let i = renderedCount; i < nextEnd; i++) {
+                const photo = filteredPhotos[i];
+                const delay = ((i - renderedCount) % 12) * 0.04;
+
+                const card = document.createElement("div");
+                card.className = "masonry-item";
+                card.style.animationDelay = `${delay}s`;
+                card.onclick = () => openLightbox(i);
+
+                card.innerHTML = `
+                    <img src="${photo.url}" alt="${photo.albumTitle}" loading="lazy">
+                    <div class="photo-overlay">
+                        <span class="photo-album-tag">📍 ${photo.albumTitle}</span>
+                        <div class="photo-caption">
+                            <span>${photo.categoryLabel}</span>
+                            <span>⤢ Phóng to</span>
+                        </div>
                     </div>
                 `;
-                container.insertAdjacentHTML('beforeend', html);
+                masonryBox.appendChild(card);
             }
-            
-            setTimeout(() => {
-                const items = container.querySelectorAll('.gallery-item:not(.loaded)');
-                items.forEach(el => el.classList.add('loaded'));
-            }, 50);
 
-            loadedImageCount = endIndex;
-            setTimeout(() => { isFetching = false; }, 300);
+            renderedCount = nextEnd;
+            loadMoreWrap.style.display = renderedCount < filteredPhotos.length ? "block" : "none";
         }
 
-        // Cảm biến Cuộn
-        window.addEventListener('scroll', () => {
-            if (document.getElementById('album-view').style.display === 'block') {
-                if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300) {
-                    loadMoreAlbumImages();
+        /* ==========================================================================
+           5. HIỂN THỊ LƯỚI ALBUM THƯ MỤC
+           ========================================================================== */
+        function renderAlbumsGrid() {
+            const albumsBox = document.getElementById("albums-box");
+            albumsBox.innerHTML = "";
+
+            const targetCategories = currentCategory === "all" ? ["banthan", "khungcanh"] : [currentCategory];
+            let cardIndex = 0;
+
+            targetCategories.forEach(cat => {
+                const catAlbums = albums[cat] || {};
+                Object.entries(catAlbums).forEach(([albumKey, imgList]) => {
+                    if (!imgList || imgList.length === 0) return;
+
+                    const cleanName = decodeURIComponent(albumKey).replace(/[-_]/g, " ");
+                    const coverId = `album-cover-${cardIndex}`;
+                    const delay = cardIndex * 0.06;
+                    cardIndex++;
+
+                    const card = document.createElement("div");
+                    card.className = "album-card";
+                    card.style.animationDelay = `${delay}s`;
+                    card.onclick = () => {
+                        currentCategory = cat;
+                        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+                        document.getElementById(`tab-${cat}`).classList.add("active");
+                        selectAlbumPill(albumKey);
+                    };
+
+                    card.innerHTML = `
+                        <img id="${coverId}" src="${imgList[0]}" alt="${cleanName}" loading="lazy">
+                        <div class="album-card-info">
+                            <div class="album-card-title">
+                                <span>${cleanName}</span>
+                                <span>→</span>
+                            </div>
+                            <div class="album-card-meta">
+                                ${imgList.length} bức ảnh • ${cat === "banthan" ? "Bản thân" : "Khung cảnh"}
+                            </div>
+                        </div>
+                    `;
+                    albumsBox.appendChild(card);
+
+                    // Tự động chuyển ảnh bìa mượt mà nếu album có nhiều ảnh
+                    if (imgList.length > 1) {
+                        let idx = 0;
+                        const timer = setInterval(() => {
+                            const imgEl = document.getElementById(coverId);
+                            if (imgEl) {
+                                imgEl.style.opacity = "0.25";
+                                setTimeout(() => {
+                                    idx = (idx + 1) % imgList.length;
+                                    imgEl.src = imgList[idx];
+                                    imgEl.style.opacity = "1";
+                                }, 350);
+                            }
+                        }, 4500);
+                        slideshowTimers.push(timer);
+                    }
+                });
+            });
+        }
+
+        // Tự động nạp thêm ảnh khi người dùng cuộn xuống gần cuối trang
+        window.addEventListener("scroll", () => {
+            if (displayMode === "masonry" && renderedCount < filteredPhotos.length) {
+                if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 450) {
+                    renderMoreMasonryItems();
                 }
             }
         });
 
-        // Phóng to ảnh
-        function openLightbox(src) {
-            const lightbox = document.getElementById('lightbox');
-            document.getElementById('lightbox-img').src = src;
-            lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden'; 
+        /* ==========================================================================
+           6. ĐIỀU KHIỂN LIGHTBOX PHÓNG TO GIỮA MÀN HÌNH
+           ========================================================================== */
+        function openLightbox(index) {
+            if (!filteredPhotos[index]) return;
+            currentLightboxIndex = index;
+            updateLightboxContent();
+
+            const lb = document.getElementById("lightbox");
+            lb.classList.add("active");
+            document.body.style.overflow = "hidden";
+        }
+
+        function updateLightboxContent() {
+            const item = filteredPhotos[currentLightboxIndex];
+            const imgEl = document.getElementById("lightbox-img");
+            imgEl.classList.remove("zoomed");
+            imgEl.src = item.url;
+
+            document.getElementById("lb-counter").innerText = `${currentLightboxIndex + 1} / ${filteredPhotos.length}`;
+            document.getElementById("lb-caption").innerText = `📍 ${item.albumTitle} — ${item.categoryLabel}`;
+            document.getElementById("lb-download").href = item.url;
+        }
+
+        function navigateLightbox(step, event) {
+            if (event) event.stopPropagation();
+            if (filteredPhotos.length === 0) return;
+            currentLightboxIndex = (currentLightboxIndex + step + filteredPhotos.length) % filteredPhotos.length;
+            updateLightboxContent();
+        }
+
+        function toggleZoomLightbox(event) {
+            if (event) event.stopPropagation();
+            document.getElementById("lightbox-img").classList.toggle("zoomed");
         }
 
         function closeLightbox() {
-            document.getElementById('lightbox').classList.remove('active');
-            document.body.style.overflow = 'auto'; 
-            setTimeout(() => document.getElementById('lightbox-img').src = "", 300);
+            const lb = document.getElementById("lightbox");
+            const imgEl = document.getElementById("lightbox-img");
+            imgEl.classList.remove("zoomed");
+            lb.classList.remove("active");
+            document.body.style.overflow = "auto";
         }
-        document.getElementById('lightbox').addEventListener('click', function(e) {
-            if (e.target === this) closeLightbox();
+
+        function handleLightboxBackdrop(event) {
+            if (event.target.id === "lightbox" || event.target.classList.contains("lightbox-Stage")) {
+                closeLightbox();
+            }
+        }
+
+        // Hỗ trợ phím mũi tên Trái / Phải và phím ESC trên máy tính
+        document.addEventListener("keydown", e => {
+            const lb = document.getElementById("lightbox");
+            if (!lb.classList.contains("active")) return;
+            if (e.key === "Escape") closeLightbox();
+            if (e.key === "ArrowRight") navigateLightbox(1);
+            if (e.key === "ArrowLeft") navigateLightbox(-1);
         });
 
-        // Kích hoạt
+        // Khởi chạy ứng dụng
         initGallery();
-
     </script>
 </body>
 </html>

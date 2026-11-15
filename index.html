@@ -458,92 +458,143 @@
             .stat-number { font-size: 24px; }
             .stat-label { font-size: 11px; }
         }
-/* --- CSS CHO MÀN HÌNH CHỜ KHỞI TẠO --- */
-        .splash-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(3, 20, 30, 0.92);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.5s ease;
-        }
-        .splash-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
-            border-radius: 28px;
-            padding: 40px;
-            width: 90%;
-            max-width: 440px;
-            text-align: center;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-        }
-        .splash-badge {
-            font-size: 11px;
-            letter-spacing: 3px;
-            color: var(--cyan);
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-        .splash-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 24px;
-            color: var(--white);
-            margin: 0 0 15px 0;
-        }
-        .splash-desc {
-            font-size: 14px;
-            color: rgba(255,255,255,0.7);
-            line-height: 1.6;
-            margin-bottom: 25px;
-        }
-        .splash-progress-wrap {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            height: 10px;
-            width: 100%;
-            overflow: hidden;
-            margin-bottom: 10px;
-        }
-        .splash-progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #00c6a7, #20D9E8);
-            width: 0%;
-            transition: width 0.3s ease;
-            box-shadow: 0 0 15px rgba(0, 201, 167, 0.6);
-        }
-        .splash-percent {
-            font-family: 'Outfit', sans-serif;
-            font-size: 16px;
-            color: var(--cyan);
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        .splash-btn {
-            background: linear-gradient(135deg, #00C9A7, #20D9E8);
-            color: #000;
-            font-weight: 700;
-            padding: 14px 20px;
-            border: none;
-            border-radius: 14px;
-            font-size: 15px;
-            width: 100%;
-            cursor: pointer;
-            transition: 0.3s;
-            opacity: 0.5;
-        }
-        .splash-btn:not(:disabled) {
-            opacity: 1;
-            cursor: pointer;
-            box-shadow: 0 10px 25px rgba(0, 201, 167, 0.4);
-        }
-        .splash-btn:not(:disabled):hover {
-            transform: translateY(-2px);
-        }
+/* --- CSS MÀN HÌNH CHỜ PHONG CÁCH NEON CYBER (NÂNG CẤP TỪ VIDEO) --- */
+.splash-overlay {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(15, 23, 42, 0.92) 0%, rgba(8, 13, 24, 0.98) 100%);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.splash-overlay.hide-splash {
+    opacity: 0;
+    transform: scale(1.05);
+    pointer-events: none;
+}
+
+.splash-card {
+    width: 100%;
+    max-width: 340px;
+    padding: 32px 28px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0, 245, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+    animation: cardPulseGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes cardPulseGlow {
+    0% { box-shadow: 0 20px 50px rgba(0, 245, 255, 0.06), 0 0 0 1px rgba(0, 245, 255, 0.08); }
+    100% { box-shadow: 0 20px 60px rgba(56, 239, 125, 0.14), 0 0 0 1px rgba(0, 245, 255, 0.28); }
+}
+
+.splash-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #00f5ff;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.splash-badge-dot {
+    width: 6px;
+    height: 6px;
+    background: #00f5ff;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #00f5ff;
+    animation: blinkDot 1s infinite alternate;
+}
+
+@keyframes blinkDot {
+    from { opacity: 0.3; }
+    to { opacity: 1; }
+}
+
+.splash-title {
+    font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+    margin: 0 0 6px;
+    color: #e2e8f0;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.splash-desc {
+    margin: 0 0 22px;
+    color: #94a3b8;
+    font-size: 13.5px;
+    line-height: 1.5;
+    min-height: 20px;
+    transition: color 0.3s ease;
+}
+
+/* Số % to và phát sáng nằm TRÊN thanh bar giống hệt video */
+.splash-percent {
+    display: block;
+    margin-bottom: 10px;
+    color: #00f5ff;
+    font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    text-shadow: 0 0 16px rgba(0, 245, 255, 0.65);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.splash-percent.completed {
+    color: #38ef7d;
+    text-shadow: 0 0 18px rgba(56, 239, 125, 0.75);
+}
+
+/* Rãnh thanh tiến trình */
+.splash-track {
+    height: 10px;
+    width: 100%;
+    overflow: hidden;
+    background: #334155;
+    border-radius: 30px;
+    position: relative;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Thanh chạy chuyển màu #00f5ff -> #38ef7d kèm hiệu ứng ánh sáng quét */
+.splash-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #00f5ff 0%, #38ef7d 100%);
+    box-shadow: 0 0 12px #00f5ff;
+    border-radius: 30px;
+    position: relative;
+    transition: width 0.04s linear;
+}
+
+.splash-fill::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+    transform: translateX(-100%);
+    animation: barShimmer 1.2s infinite;
+}
+
+@keyframes barShimmer {
+    100% { transform: translateX(100%); }
+}
 /* --- NÚT BỘ SƯU TẬP ẢNH (CHUẨN TỈ LỆ 1.963:1) --- */
         .gallery-link-card {
             display: flex;
@@ -587,23 +638,25 @@
 <!-- Hộp Tooltip hiển thị tên tỉnh -->
     <div id="tooltip" class="tooltip"></div>
 
-   <!-- MÀN HÌNH CHỜ (SPLASH SCREEN TẢI THẬT) -->
+ <!-- MÀN HÌNH CHỜ PHONG CÁCH VIDEO -->
     <div id="splash-screen" class="splash-overlay">
         <div class="splash-card">
-            <div class="splash-badge">VIETNAM TRAVEL EXPLORER</div>
-            <h2 class="splash-title">HÀNH TRÌNH CỦA HERO ĐANG TẢI...</h2>
-            <p class="splash-desc">
-                Hãy chờ Hero Duy một chút xíu nhé!<br><br>
-                Chúng mình đang tải lại những dấu chân, điểm đến và khoảnh khắc Hero Duy đã từng khám phá. Lần đầu tiên có thể sẽ mất thêm một chút thời gian, nhưng những lần trở lại sau sẽ nhanh hơn rất nhiều.
-            </p>
-            <div class="splash-progress-wrap">
-                <div class="splash-progress-bar" id="splash-progress"></div>
+            <div class="splash-badge">
+                <span class="splash-badge-dot"></span>
+                VIETNAM TRAVEL EXPLORER
             </div>
+            <h1 class="splash-title" id="splash-title-text">Đang tải hành trình...</h1>
+            <p class="splash-desc" id="splash-status-text">Đang kết nối dữ liệu bản đồ của Hero Duy.</p>
+            
+            <!-- Con số % nằm phía trên thanh chạy -->
             <div class="splash-percent" id="splash-percent-text">0%</div>
-            <button id="splash-btn" class="splash-btn" disabled onclick="closeSplash()">BẮT ĐẦU KHÁM PHÁ</button>
+            
+            <!-- Thanh chạy -->
+            <div class="splash-track">
+                <div class="splash-fill" id="splash-progress"></div>
+            </div>
         </div>
     </div>
-
     <header class="hero-header">
         <div class="hero-subtitle">✦ TRAVEL PORTFOLIO • BY HERO DUY ✦</div>
         <h1>Bản Đồ Hành Trình Việt Nam 🗺️</h1>
@@ -1069,9 +1122,93 @@ const dsTinhThanh = [
 document.addEventListener("DOMContentLoaded", function() {
     initMap();
     populateSelectBox();
-    setupMapClick(); // Kích hoạt sự kiện click/hover ngay lập tức
-    loadData();      // Tải dữ liệu từ cache và Google Sheets
+    setupMapClick(); 
+    
+    // 1. Chạy ngầm việc tải dữ liệu bản đồ ở phía sau ngay lập tức
+    loadData();      
+    
+    // 2. Chạy hiệu ứng thanh tiến trình 3 giây độc lập ở phía trước
+    runCyberSplash();
 });
+
+function runCyberSplash() {
+    const progressBar = document.getElementById("splash-progress");
+    const percentText = document.getElementById("splash-percent-text");
+    const statusText = document.getElementById("splash-status-text");
+    const titleText = document.getElementById("splash-title-text");
+    const splashScreen = document.getElementById("splash-screen");
+
+    const duration = 2800; // Chạy từ 0% -> 100% trong 2.8 giây (cộng 0.2s nghỉ là tròn 3 giây)
+    const startTime = performance.now();
+
+    function updateCounter(currentTime) {
+        const elapsed = currentTime - startTime;
+        let rawProgress = Math.min(elapsed / duration, 1);
+
+        // Gia tốc easeInOutCubic giống nhịp điệu trong video (nhanh ở giữa, đầm ở đầu và cuối)
+        let easedProgress = rawProgress < 0.5
+            ? 4 * rawProgress * rawProgress * rawProgress
+            : 1 - Math.pow(-2 * rawProgress + 2, 3) / 2;
+
+        let percent = Math.floor(easedProgress * 100);
+
+        progressBar.style.width = percent + "%";
+        percentText.innerText = percent + "%";
+
+        // Đổi dòng trạng thái tự động cho sinh động
+        if (percent > 35 && percent < 75) {
+            statusText.innerText = "Đang đồng bộ 34 tỉnh thành và điểm đến...";
+        } else if (percent >= 75 && percent < 100) {
+            statusText.innerText = "Đang hoàn tất giao diện khám phá...";
+        }
+
+        if (rawProgress < 1) {
+            requestAnimationFrame(updateCounter);
+        } else {
+            // Chạm mốc 100%: Đổi số sang màu xanh lá #38ef7d và mở màn hình
+            progressBar.style.width = "100%";
+            percentText.innerText = "100%";
+            percentText.classList.add("completed");
+            titleText.innerText = "Hoàn tất!";
+            statusText.innerText = "Chào mừng đến với hành trình của Hero Duy.";
+
+            setTimeout(() => {
+                if (splashScreen) {
+                    splashScreen.classList.add("hide-splash");
+                    setTimeout(() => splashScreen.style.display = "none", 550);
+                }
+            }, 250);
+        }
+    }
+
+    requestAnimationFrame(updateCounter);
+}
+
+// 3. TẢI DỮ LIỆU CHẠY NGẦM (KHÔNG KHÓA MÀN HÌNH CHỜ)
+function loadData() {
+    const cachedData = localStorage.getItem("heroDuyTravelData");
+    if (cachedData) {
+        try {
+            travelData = JSON.parse(cachedData);
+            renderMapData();
+        } catch (e) {
+            console.error("Lỗi đọc cache:", e);
+        }
+    }
+
+    fetch(API_URL)
+        .then(res => res.json())
+        .then(data => {
+            if (Array.isArray(data) && data.length > 0) {
+                travelData = data;
+                localStorage.setItem("heroDuyTravelData", JSON.stringify(travelData));
+                renderMapData();
+            }
+        })
+        .catch(err => {
+            console.warn("Đang dùng dữ liệu bộ nhớ đệm:", err);
+        });
+}
 
 // 1. KHỞI TẠO BẢN ĐỒ GỘP
 function initMap() {

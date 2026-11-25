@@ -793,8 +793,45 @@ html, body {
 }
 
 @media (max-width: 720px) {
-  .top-nav { padding: 8px 12px; }
+  .top-nav {
+    padding: 8px 12px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .nav-brand {
+    flex: 1;
+    min-width: 0;
+  }
+  .nav-title { font-size: 15px; }
+  .nav-sub { display: none; }
+  .nav-hero-pill {
+    padding: 4px 8px;
+    gap: 6px;
+    white-space: nowrap;
+  }
+  #nav-hero-name {
+    max-width: 95px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-links {
+    order: 3;
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-btn {
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 6px 10px;
+    font-size: 12.5px;
+  }
   .screen-viewport { padding: 14px 12px 28px; }
+  .menu-hero { padding: 20px 16px; gap: 18px; }
   .menu-stats-strip { grid-template-columns: repeat(2, 1fr); }
   .grid-3, .grid-2 { grid-template-columns: 1fr; }
 }
